@@ -105,7 +105,7 @@ const Layout = ({ children }: PropsWithChildren) => {
       <main className="flex-1 pt-14 pb-16 md:pb-0">
         <AnimatePresence mode="wait">
           <motion.div
-            key={location.pathname}
+            key={pathname}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 1, y: -10 }}
