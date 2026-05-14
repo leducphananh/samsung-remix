@@ -6,11 +6,13 @@ import clsx from 'clsx';
 import { useState } from 'react';
 import type {
   CarePlusOption,
+  CarePlusSelection,
   Product,
   ProductColor,
   ProductStorage,
 } from '../_data/product.data';
 import { tradeOptions } from '../_data/trade.data';
+import SamsungCareModal from './samsung-care-modal';
 import TradeInModal from './trade-in-modal/trade-in-modal';
 
 export function ProductSelector({ product }: { product: Product }) {
@@ -174,44 +176,143 @@ export function CarePlusSection({
   onSelect,
 }: {
   options: readonly CarePlusOption[];
-  selectedCare: CarePlusOption;
-  onSelect: (option: CarePlusOption) => void;
+  selectedCare: CarePlusSelection | null;
+  onSelect: (option: CarePlusSelection | null) => void;
 }) {
+  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(
+    selectedCare?.id ?? null,
+  );
+  const [selectedCareOption, setSelectedCareOption] = useState<number | null>(
+    null,
+  );
+  const [selectedPaymentOption, setSelectedPaymentOption] = useState<{
+    label: string;
+    price: number;
+  } | null>(null);
+  const [isCareModalOpen, setIsCareModalOpen] = useState(false);
+  const selectedGroup = options.find(option => option.id === selectedOptionId);
+  const selectedOptions = selectedGroup?.options || [];
+
   return (
-    <div>
-      <label className="mb-4 flex items-center gap-2 text-sm font-bold">
-        <ShieldCheck className="h-4 w-4" />
-        5. Chọn Samsung Care+
-      </label>
-      <div className="grid gap-3">
-        {options.map(option => (
-          <button
-            key={option.id}
-            onClick={() => onSelect(option)}
-            className={`flex items-start gap-4 rounded-xl border-2 p-4 text-left transition-all ${selectedCare.id === option.id ? 'border-primary bg-white shadow-sm' : 'border-surface-container-highest bg-surface'}`}>
-            <div
-              className={`mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border ${selectedCare.id === option.id ? 'border-primary bg-primary' : 'border-surface-container-highest'}`}>
-              {selectedCare.id === option.id && (
-                <CheckCircle className="fill-primary h-4 w-4 text-white" />
-              )}
+    <>
+      <div>
+        <label className="mb-4 flex items-center gap-2 text-sm font-bold">
+          <ShieldCheck className="h-4 w-4" />
+          5. Chọn Samsung Care+
+        </label>
+
+        <ul className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-4 md:gap-4">
+          {options.map(option => {
+            const isSimple = !option.details?.length;
+            const isSelected = option.id === selectedOptionId;
+
+            return (
+              <li key={option.id} className="col-span-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedOptionId(option.id);
+                    setSelectedCareOption(null);
+
+                    if (isSimple) {
+                      onSelect(null);
+                    }
+                  }}
+                  className={clsx(
+                    'flex h-full w-full cursor-pointer rounded-[5px] border p-4 md:p-6',
+                    isSimple ? 'items-center' : 'flex-col',
+                    isSelected
+                      ? 'ring-accent border-[#006bea] ring-1 ring-inset'
+                      : 'border-[#ddd] hover:border-[#555]',
+                  )}>
+                  <div className={clsx(isSimple ? '' : 'space-y-1')}>
+                    <p className="text-left text-[16px] font-bold md:text-[18px]">
+                      {option.title}
+                    </p>
+                    {option.price && (
+                      <p className="text-left text-[14px] md:text-[16px]">
+                        {option.price}
+                      </p>
+                    )}
+                  </div>
+                  {option.details?.length && (
+                    <>
+                      <div className="mt-4 mb-3 h-px w-full bg-[#ddd]" />
+                      <ul className="text-left text-[12px]">
+                        {option.details.map(detail => (
+                          <li
+                            key={detail}
+                            className="relative mt-1 pl-3.5 before:absolute before:top-1/2 before:left-0 before:h-1 before:w-1 before:-translate-y-1/2 before:rounded-full before:bg-black">
+                            {detail}
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+
+        {selectedOptions.length > 0 && (
+          <div className="mt-2 rounded-md bg-[#f5f7fe] p-4 md:mt-4 md:px-6 md:py-5.5">
+            <div className="mb-4 text-[13px] font-bold md:text-[14px]">
+              Thanh toán
             </div>
-            <div className="flex-1">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <p className="font-bold">{option.name}</p>
-                <p className="text-sm font-bold">
-                  {option.price === 0 ? 'Miễn phí' : formatPrice(option.price)}
-                </p>
-              </div>
-              <p className="text-accent mt-1 text-xs font-bold">
-                {option.term}
-              </p>
-              <p className="text-secondary mt-1 text-xs leading-relaxed">
-                {option.desc}
-              </p>
-            </div>
-          </button>
-        ))}
+            <ul className="grid grid-cols-1 gap-2 md:grid-cols-3 md:gap-4">
+              {selectedOptions.map(option => (
+                <li key={option.id}>
+                  <button
+                    type="button"
+                    className={clsx(
+                      'flex h-full w-full cursor-pointer items-center justify-between gap-4 rounded-md border bg-white p-4 md:px-5 md:py-4',
+                      selectedCareOption === option.id
+                        ? 'ring-accent border-[#006bea] ring-1 ring-inset'
+                        : 'border-[#ddd] hover:border-[#555]',
+                    )}
+                    onClick={() => {
+                      setSelectedCareOption(option.id);
+                      setSelectedPaymentOption({
+                        label: option.label,
+                        price: option.price,
+                      });
+                      setIsCareModalOpen(true);
+
+                      if (selectedGroup) {
+                        onSelect({
+                          id: selectedGroup.id,
+                          title: selectedGroup.title,
+                          price: option.price,
+                          label: option.label,
+                        });
+                      }
+                    }}>
+                    <div className="flex-auto text-left text-[12px] font-bold md:flex-1 md:text-[14px]">
+                      {option.label}
+                    </div>
+                    <div className="flex-auto text-right text-[12px] md:flex-1 md:text-[14px]">
+                      {formatPrice(option.price)}
+                    </div>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
-    </div>
+
+      <SamsungCareModal
+        isOpen={isCareModalOpen}
+        option={selectedPaymentOption}
+        onClose={() => {
+          setIsCareModalOpen(false);
+          setSelectedOptionId('none');
+        }}
+        onAccept={() => {
+          setIsCareModalOpen(false);
+        }}
+      />
+    </>
   );
 }

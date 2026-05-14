@@ -16,7 +16,7 @@ import {
 } from './_components/selectors';
 import { StickyAddToCart } from './_components/sticky-add-to-cart';
 import type {
-  CarePlusOption,
+  CarePlusSelection,
   ProductColor,
   ProductStorage,
 } from './_data/product.data';
@@ -35,25 +35,24 @@ export default function DetailPage() {
   const [selectedStorage, setSelectedStorage] = useState<ProductStorage>(
     product.storage[0],
   );
-  const [selectedCare, setSelectedCare] = useState<CarePlusOption>(
-    carePlusOptions[0],
+  const [selectedCare, setSelectedCare] = useState<CarePlusSelection | null>(
+    null,
   );
   const [openAccordions, setOpenAccordions] = useState<string[]>([
     'Đánh giá & Xếp hạng',
   ]);
 
-  const totalPrice = selectedStorage.price + selectedCare.price;
+  const totalPrice = selectedStorage.price + (selectedCare?.price ?? 0);
 
   const handleAddToCart = () => {
     onAddToCart({
-      id: `${id}-${selectedColor.name}-${selectedStorage.size}-${selectedCare.id}`,
+      id: `${id}-${selectedColor.name}-${selectedStorage.size}-${selectedCare?.id ?? 'none'}`,
       name: product.name,
       price: totalPrice,
       color: selectedColor.name,
-      storage:
-        selectedCare.id === 'none'
-          ? selectedStorage.size
-          : `${selectedStorage.size} + ${selectedCare.name}`,
+      storage: !selectedCare
+        ? selectedStorage.size
+        : `${selectedStorage.size} + ${selectedCare.label ?? selectedCare.title}`,
       image: product.image,
     });
     router.push('/cart');

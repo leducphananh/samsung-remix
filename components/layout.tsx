@@ -106,9 +106,9 @@ const Layout = ({ children }: PropsWithChildren) => {
         <AnimatePresence mode="wait">
           <motion.div
             key={pathname}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 1, y: -10 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 1 }}
             transition={{ duration: 0.2 }}>
             {children}
           </motion.div>

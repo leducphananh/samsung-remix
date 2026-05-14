@@ -53,25 +53,59 @@ export const products = {
 
 export const carePlusOptions = [
   {
+    id: 'accidental-damage',
+    title: 'Gói Rơi vỡ vào nước',
+    price: '1.299.000 ₫ hoặc 3.399.000 ₫',
+    details: [
+      'Bảo vệ thiết bị với các rủi ro liên quan rơi vỡ và vào nước',
+      'Thay mới thiết bị khi hư hại trên 85%',
+      'Dịch vụ và linh kiện chính hãng',
+      'Được sửa chữa và bảo vệ toàn cầu lên đến 55 quốc gia',
+    ],
+    options: [
+      {
+        id: 1,
+        label: 'Samsung Care+ 6 Tháng',
+        price: 1299000,
+      },
+      {
+        id: 2,
+        label: 'Samsung Care+ 1 Năm - Giảm 15%',
+        price: 1725000,
+      },
+      {
+        id: 3,
+        label: 'Samsung Care+ 2 Năm',
+        price: 3399000,
+      },
+    ],
+  },
+  {
+    id: 'extended-warranty',
+    title: 'Gói Gia hạn bảo hành',
+    price: 'Chỉ từ 499.000 ₫',
+    details: ['Gia hạn bảo hành chính hãng với các lỗi liên quan kỹ thuật'],
+    options: [
+      {
+        id: 1,
+        label: 'Gói Gia Hạn Bảo Hành 6 Tháng',
+        price: 499000,
+      },
+      {
+        id: 2,
+        label: 'Gói Gia Hạn Bảo Hành 2 Năm',
+        price: 1490000,
+      },
+      {
+        id: 3,
+        label: 'Gói Gia Hạn Bảo Hành 1 Năm - Giảm 20%',
+        price: 639000,
+      },
+    ],
+  },
+  {
     id: 'none',
-    name: 'Không thêm Samsung Care+',
-    term: 'Bảo hành tiêu chuẩn',
-    price: 0,
-    desc: 'Vẫn áp dụng bảo hành chính hãng theo điều kiện của Samsung.',
-  },
-  {
-    id: '6m',
-    name: 'Samsung Care+ 6 tháng',
-    term: 'Bảo vệ rơi vỡ và vào nước',
-    price: 1299000,
-    desc: 'Phù hợp khi bạn muốn bảo vệ máy trong giai đoạn sử dụng đầu tiên.',
-  },
-  {
-    id: '12m',
-    name: 'Samsung Care+ 12 tháng',
-    term: 'Bảo vệ toàn diện hơn',
-    price: 2199000,
-    desc: 'Khuyến nghị cho người dùng thường xuyên di chuyển hoặc làm việc ngoài trời.',
+    title: 'Không, cảm ơn',
   },
 ] as const;
 
@@ -102,4 +136,21 @@ export const accordionItems = [
 export type Product = (typeof products)[keyof typeof products];
 export type ProductColor = Product['colors'][number];
 export type ProductStorage = Product['storage'][number];
-export type CarePlusOption = (typeof carePlusOptions)[number];
+export interface CarePlusOption {
+  id: string;
+  title: string;
+  price?: string;
+  details?: readonly string[];
+  options?: readonly {
+    id: number;
+    label: string;
+    price: number;
+  }[];
+}
+
+export interface CarePlusSelection {
+  id: string;
+  title: string;
+  price: number;
+  label?: string;
+}
