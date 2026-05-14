@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-samsung-one: var(--font-samsung-one);
+  --font-samsung-sharp: var(--font-samsung-sharp);
+
+  --color-surface: #fbf9f9;
+  --color-surface-dim: #dbdad9;
+  --color-surface-bright: #fbf9f9;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f5f3f3;
+  --color-surface-container: #efeded;
+  --color-surface-container-high: #e9e8e7;
+  --color-surface-container-highest: #e3e2e2;
+
+  --color-primary: #000000;
+  --color-secondary: #5d5f5f;
+  --color-accent: #2189ff;
+
+  --radius-xl: 1.5rem;
+  --radius-lg: 1rem;
+}
+
+body {
+  @apply bg-surface text-primary antialiased;
+  font-family:
+    var(--font-samsung-one), var(--font-samsung-sharp), Helvetica, sans-serif;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
