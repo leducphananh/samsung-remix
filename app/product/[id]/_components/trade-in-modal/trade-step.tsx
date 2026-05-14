@@ -1,7 +1,7 @@
 'use client';
 
 import Select from '@/components/select';
-import { formatTradeInValue } from '@/utils/price.format';
+import { formatTradeInValue } from '@/utils/price.util';
 import clsx from 'clsx';
 import { Smartphone, Tablet, Watch } from 'lucide-react';
 import { useTradeIn } from './trade-in-context';

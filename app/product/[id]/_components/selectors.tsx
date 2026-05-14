@@ -1,6 +1,6 @@
 import { CheckCircle, ShieldCheck } from 'lucide-react';
 
-import { formatPrice } from '@/utils/price.format';
+import { formatPrice } from '@/utils/price.util';
 
 import clsx from 'clsx';
 import { useState } from 'react';

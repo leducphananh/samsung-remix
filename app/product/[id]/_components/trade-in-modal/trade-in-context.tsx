@@ -1,5 +1,6 @@
 'use client';
 
+import { getDeviceCapacity } from '@/utils/device-capacity.util';
 import { ReactNode, createContext, useContext, useMemo, useState } from 'react';
 import {
   appleTradeInDevices,
@@ -9,7 +10,6 @@ import {
   samsungTradeInDevices,
   samsungWatchTradeInDevices,
 } from '../../_data/trade.data';
-import { getDeviceCapacity } from '../../_utils/device-capacity.util';
 
 const brands = [
   { id: 'samsung', label: 'SAMSUNG', discount: '19.200.000 ₫' },

@@ -1,4 +1,4 @@
-import { formatPrice } from '@/utils/price.format';
+import { formatPrice } from '@/utils/price.util';
 
 export function StickyAddToCart({
   totalPrice,

@@ -1,6 +1,6 @@
 'use client';
 
-import { formatTradeInValue } from '@/utils/price.format';
+import { formatTradeInValue } from '@/utils/price.util';
 import { CircleAlert } from 'lucide-react';
 import { useTradeIn } from './trade-in-context';
 
