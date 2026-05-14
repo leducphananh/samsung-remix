@@ -43,7 +43,6 @@ export default function DetailPage() {
   ]);
 
   const totalPrice = selectedStorage.price + selectedCare.price;
-  const tradeInEstimate = 5000000;
 
   const handleAddToCart = () => {
     onAddToCart({
@@ -83,10 +82,7 @@ export default function DetailPage() {
           selectedStorage={selectedStorage}
           onSelect={setSelectedStorage}
         />
-        <TradeInSection
-          tradeInEstimate={tradeInEstimate}
-          totalPrice={totalPrice}
-        />
+        <TradeInSection />
         <CarePlusSection
           options={carePlusOptions}
           selectedCare={selectedCare}

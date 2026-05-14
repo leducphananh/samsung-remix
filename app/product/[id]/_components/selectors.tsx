@@ -1,44 +1,17 @@
-import {
-  BarChart3,
-  CheckCircle,
-  ClipboardCheck,
-  ShieldCheck,
-  Smartphone,
-  ArrowRightLeft as SwapIcon,
-  Truck,
-} from 'lucide-react';
+import { CheckCircle, ShieldCheck } from 'lucide-react';
 
 import { formatPrice } from '@/utils/price.format';
 
+import clsx from 'clsx';
+import { useState } from 'react';
 import type {
   CarePlusOption,
   Product,
   ProductColor,
   ProductStorage,
 } from '../_data/product.data';
-
-const tradeInSteps = [
-  {
-    title: 'Chọn thiết bị cũ',
-    desc: 'Nhập dòng máy, dung lượng và tình trạng tổng thể để nhận giá trị tạm tính.',
-    icon: Smartphone,
-  },
-  {
-    title: 'Nhận báo giá',
-    desc: 'Hệ thống cộng ưu đãi thu cũ đổi mới và hiển thị số tiền tiết kiệm dự kiến.',
-    icon: BarChart3,
-  },
-  {
-    title: 'Kiểm tra máy',
-    desc: 'Kỹ thuật viên xác nhận ngoại hình, màn hình, pin và chức năng khi giao nhận.',
-    icon: ClipboardCheck,
-  },
-  {
-    title: 'Bù tiền lên đời',
-    desc: 'Thanh toán phần chênh lệch và nhận Galaxy mới cùng hóa đơn bảo hành.',
-    icon: Truck,
-  },
-];
+import { tradeOptions } from '../_data/trade.data';
+import TradeInModal from './trade-in-modal/trade-in-modal';
 
 export function ProductSelector({ product }: { product: Product }) {
   return (
@@ -119,62 +92,79 @@ export function StorageSelector({
   );
 }
 
-export function TradeInSection({
-  tradeInEstimate,
-  totalPrice,
-}: {
-  tradeInEstimate: number;
-  totalPrice: number;
-}) {
-  return (
-    <div className="space-y-4">
-      <div>
-        <label className="mb-1 block text-sm font-bold">
-          4. Thu cũ đổi mới
-        </label>
-        <p className="text-secondary text-sm">
-          Nhận trợ giá lên đến {formatPrice(tradeInEstimate)} khi thiết bị cũ đủ
-          điều kiện.
-        </p>
-      </div>
+export function TradeInSection() {
+  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
+  const [isTradeInModalOpen, setIsTradeInModalOpen] = useState(false);
 
-      <div className="bg-surface-container-low rounded-xl p-5">
-        <div className="mb-5 flex items-center gap-2">
-          <SwapIcon className="h-5 w-5" />
-          <span className="text-xl font-bold">Quy trình lên đời</span>
+  return (
+    <>
+      <div className="space-y-4">
+        <div>
+          <label className="mb-1 block text-sm font-bold">
+            4. Thu cũ đổi mới
+          </label>
+          <p className="text-primary text-sm">
+            Tiết kiệm lên đến <b>18 TRIỆU đồng</b> khi bạn tham gia thu cũ một
+            thiết bị đủ điều kiện!{'\n'}Áp dụng thu cũ đổi mới nhiều thiết bị di
+            động khác nhau từ nhiều thương hiệu khác nhau
+          </p>
         </div>
-        <div className="grid gap-3 sm:grid-cols-2">
-          {tradeInSteps.map((step, index) => {
-            const Icon = step.icon;
+
+        <ul className="mt-6 grid grid-cols-1 gap-2 md:grid-cols-2 md:gap-4">
+          {tradeOptions.map(option => {
+            const isSelected = option.id === selectedOptionId;
+
             return (
-              <div
-                key={step.title}
-                className="border-surface-container-highest rounded-xl border bg-white p-4">
-                <div className="mb-3 flex items-center gap-3">
-                  <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white">
-                    {index + 1}
+              <li key={option.id} className="col-span-1">
+                <button
+                  type="button"
+                  className={clsx(
+                    'flex h-full w-full items-center justify-between rounded-xl border-2 p-4 text-left transition-all md:p-5.5',
+                    isSelected
+                      ? 'border-primary bg-white shadow-sm'
+                      : 'border-surface-container-highest bg-surface',
+                  )}
+                  onClick={() => {
+                    setSelectedOptionId(option.id);
+
+                    if (option.id === 'trade-in') {
+                      setIsTradeInModalOpen(true);
+                    }
+                  }}>
+                  <div className="text-[16px] font-bold md:text-[18px]">
+                    {option.label}
                   </div>
-                  <Icon className="h-5 w-5" />
-                </div>
-                <h3 className="text-sm font-bold">{step.title}</h3>
-                <p className="text-secondary mt-1 text-xs leading-relaxed">
-                  {step.desc}
-                </p>
-              </div>
+                  {option.detailTitle && (
+                    <div className="space-y-1">
+                      <div className="text-right text-[12px] text-[#757575] md:text-[14px]">
+                        {option.detailTitle}
+                      </div>
+                      <p className="text-[12px] text-[#757575] md:text-[14px]">
+                        <em className="text-[14px] text-[#006bea] not-italic md:text-[16px]">
+                          {option.detailRange?.start}
+                        </em>{' '}
+                        đến{' '}
+                        <em className="text-[14px] text-[#006bea] not-italic md:text-[16px]">
+                          {option.detailRange?.end}
+                        </em>
+                      </p>
+                    </div>
+                  )}
+                </button>
+              </li>
             );
           })}
-        </div>
-        <div className="bg-accent/5 border-accent/20 mt-4 rounded-xl border p-4">
-          <p className="text-accent text-sm font-bold">
-            Giá dự kiến sau thu cũ: từ{' '}
-            {formatPrice(Math.max(totalPrice - tradeInEstimate, 0))}
-          </p>
-          <p className="text-secondary mt-1 text-xs">
-            Giá cuối cùng được xác nhận sau bước kiểm tra thiết bị cũ.
-          </p>
-        </div>
+        </ul>
       </div>
-    </div>
+
+      <TradeInModal
+        isOpen={isTradeInModalOpen}
+        onClose={() => {
+          setIsTradeInModalOpen(false);
+          setSelectedOptionId('no-thanks');
+        }}
+      />
+    </>
   );
 }
 
