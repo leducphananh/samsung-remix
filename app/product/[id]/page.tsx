@@ -1,11 +1,18 @@
 'use client';
 import { useCart } from '@/providers/cart.provider';
+import { formatPrice } from '@/utils/price.format';
 import {
+  BarChart3,
   CheckCircle,
   ChevronDown,
+  ClipboardCheck,
+  ShieldCheck,
+  Smartphone,
   Sparkles,
   Star,
   ArrowRightLeft as SwapIcon,
+  ThumbsUp,
+  Truck,
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import Image from 'next/image';
@@ -31,8 +38,86 @@ const products = {
       { size: '512 GB', price: 37490000 },
       { size: '1 TB', price: 44490000 },
     ],
+    ratingBreakdown: [
+      { stars: 5, count: 936 },
+      { stars: 4, count: 212 },
+      { stars: 3, count: 74 },
+      { stars: 2, count: 18 },
+      { stars: 1, count: 8 },
+    ],
+    reviewHighlights: [
+      'Camera zoom rất sắc nét',
+      'Pin dùng trọn ngày',
+      'Màn hình sáng ngoài trời',
+      'Galaxy AI hữu ích',
+    ],
+    customerReviews: [
+      {
+        name: 'Minh Anh',
+        rating: 5,
+        date: '12/05/2026',
+        title: 'Camera và màn hình đúng chất flagship',
+        content:
+          'Ảnh zoom xa vẫn chi tiết, màn hình ngoài nắng nhìn rõ. Máy cầm chắc tay hơn mình nghĩ.',
+      },
+      {
+        name: 'Hoàng Nam',
+        rating: 4,
+        date: '08/05/2026',
+        title: 'Hiệu năng mạnh, AI tiện',
+        content:
+          'Dịch cuộc gọi và tóm tắt ghi chú dùng được ngay trong công việc. Máy hơi lớn nhưng pin rất ổn.',
+      },
+    ],
   },
 };
+
+const tradeInSteps = [
+  {
+    title: 'Chọn thiết bị cũ',
+    desc: 'Nhập dòng máy, dung lượng và tình trạng tổng thể để nhận giá trị tạm tính.',
+    icon: Smartphone,
+  },
+  {
+    title: 'Nhận báo giá',
+    desc: 'Hệ thống cộng ưu đãi thu cũ đổi mới và hiển thị số tiền tiết kiệm dự kiến.',
+    icon: BarChart3,
+  },
+  {
+    title: 'Kiểm tra máy',
+    desc: 'Kỹ thuật viên xác nhận ngoại hình, màn hình, pin và chức năng khi giao nhận.',
+    icon: ClipboardCheck,
+  },
+  {
+    title: 'Bù tiền lên đời',
+    desc: 'Thanh toán phần chênh lệch và nhận Galaxy mới cùng hóa đơn bảo hành.',
+    icon: Truck,
+  },
+];
+
+const carePlusOptions = [
+  {
+    id: 'none',
+    name: 'Không thêm Samsung Care+',
+    term: 'Bảo hành tiêu chuẩn',
+    price: 0,
+    desc: 'Vẫn áp dụng bảo hành chính hãng theo điều kiện của Samsung.',
+  },
+  {
+    id: '6m',
+    name: 'Samsung Care+ 6 tháng',
+    term: 'Bảo vệ rơi vỡ và vào nước',
+    price: 1299000,
+    desc: 'Phù hợp khi bạn muốn bảo vệ máy trong giai đoạn sử dụng đầu tiên.',
+  },
+  {
+    id: '12m',
+    name: 'Samsung Care+ 12 tháng',
+    term: 'Bảo vệ toàn diện hơn',
+    price: 2199000,
+    desc: 'Khuyến nghị cho người dùng thường xuyên di chuyển hoặc làm việc ngoài trời.',
+  },
+];
 
 export default function DetailPage() {
   const { addToCart: onAddToCart } = useCart();
@@ -43,20 +128,31 @@ export default function DetailPage() {
 
   const [selectedColor, setSelectedColor] = useState(product.colors[0]);
   const [selectedStorage, setSelectedStorage] = useState(product.storage[0]);
+  const [selectedCare, setSelectedCare] = useState(carePlusOptions[0]);
+  const [openAccordions, setOpenAccordions] = useState<string[]>([
+    'Đánh giá & Xếp hạng',
+  ]);
+
+  const totalPrice = selectedStorage.price + selectedCare.price;
+  const tradeInEstimate = 5000000;
+  const ratingMax = Math.max(
+    ...product.ratingBreakdown.map(item => item.count),
+  );
 
   const handleAddToCart = () => {
     onAddToCart({
-      id: `${id}-${selectedColor.name}-${selectedStorage.size}`,
+      id: `${id}-${selectedColor.name}-${selectedStorage.size}-${selectedCare.id}`,
       name: product.name,
-      price: selectedStorage.price,
+      price: totalPrice,
       color: selectedColor.name,
-      storage: selectedStorage.size,
+      storage:
+        selectedCare.id === 'none'
+          ? selectedStorage.size
+          : `${selectedStorage.size} + ${selectedCare.name}`,
       image: product.image,
     });
     router.push('/cart');
   };
-
-  const [openAccordions, setOpenAccordions] = useState<string[]>([]);
 
   const toggleAccordion = (item: string) => {
     setOpenAccordions(prev =>
@@ -76,7 +172,7 @@ export default function DetailPage() {
       },
       {
         title: 'Màn hình 2600 nits',
-        desc: 'Màn hình Dynamic AMOLED 2X sáng nhất thế giới, cho trải nghiệm nhìn rõ ràng ngay cả dưới ánh nắng gắt.',
+        desc: 'Màn hình Dynamic AMOLED 2X sáng rõ ngay cả dưới ánh nắng gắt.',
       },
     ],
   };
@@ -88,9 +184,14 @@ export default function DetailPage() {
         <div className="mt-1 flex items-center gap-4">
           <div className="flex">
             {[1, 2, 3, 4].map(i => (
-              <Star key={i} className="fill-primary text-primary h-3 w-3" />
+              <Star
+                key={i}
+                className="h-4 w-4"
+                strokeWidth={0}
+                fill="#ffaa4e"
+              />
             ))}
-            <Star className="text-primary h-3 w-3" />
+            <Star className="h-4 w-4" strokeWidth={0} fill="#ffaa4e" />
           </div>
           <span className="text-secondary text-xs font-medium">
             {product.rating} ({product.reviews} Đánh giá)
@@ -98,13 +199,7 @@ export default function DetailPage() {
         </div>
       </section>
 
-      {/* Hero Image */}
       <section className="bg-surface-container relative mt-8 flex flex-col items-center py-12">
-        {/* <img
-          src={product.image}
-          alt={product.name}
-          className="h-auto w-4/5 object-contain"
-        /> */}
         <Image
           src={product.image}
           alt={product.name}
@@ -119,9 +214,7 @@ export default function DetailPage() {
         </div>
       </section>
 
-      {/* Configuration */}
       <section className="mt-12 space-y-12 px-5">
-        {/* Model */}
         <div>
           <label className="mb-4 block text-sm font-bold">
             1. Chọn dòng máy
@@ -137,7 +230,6 @@ export default function DetailPage() {
           </div>
         </div>
 
-        {/* Colors */}
         <div>
           <label className="mb-1 block text-sm font-bold">
             2. Chọn màu sắc
@@ -148,6 +240,7 @@ export default function DetailPage() {
               <button
                 key={color.name}
                 onClick={() => setSelectedColor(color)}
+                aria-label={color.name}
                 className={`h-12 w-12 rounded-full border-2 p-0.5 transition-all ${selectedColor.name === color.name ? 'border-primary' : 'border-transparent'}`}>
                 <div
                   className="h-full w-full rounded-full"
@@ -158,7 +251,6 @@ export default function DetailPage() {
           </div>
         </div>
 
-        {/* Storage */}
         <div>
           <label className="mb-4 block text-sm font-bold">
             3. Dung lượng lưu trữ
@@ -171,31 +263,101 @@ export default function DetailPage() {
                 className={`flex items-center justify-between rounded-xl border-2 p-4 transition-all ${selectedStorage.size === s.size ? 'border-primary bg-white' : 'border-surface-container-highest bg-surface'}`}>
                 <span className="font-bold">{s.size}</span>
                 <span className="text-sm font-bold">
-                  {s.price.toLocaleString()}₫
+                  {formatPrice(s.price)}
                 </span>
               </button>
             ))}
           </div>
         </div>
 
-        {/* Trade-in */}
-        <div className="bg-surface-container-low space-y-4 rounded-xl p-5">
-          <div className="flex items-center gap-2">
-            <SwapIcon className="h-5 w-5" />
-            <span className="text-xl font-bold">Thu cũ đổi mới</span>
+        <div className="space-y-4">
+          <div>
+            <label className="mb-1 block text-sm font-bold">
+              4. Thu cũ đổi mới
+            </label>
+            <p className="text-secondary text-sm">
+              Nhận trợ giá lên đến {formatPrice(tradeInEstimate)} khi thiết bị
+              cũ đủ điều kiện.
+            </p>
           </div>
-          <p className="text-sm leading-relaxed">
-            Nhận ngay ưu đãi trợ giá lên đến{' '}
-            <span className="font-bold">5.000.000₫</span> khi thu cũ đổi mới
-            thiết bị đủ điều kiện.
-          </p>
-          <button className="border-primary w-full rounded-full border py-3 text-sm font-bold transition-transform active:scale-95">
-            Kiểm tra điều kiện
-          </button>
+
+          <div className="bg-surface-container-low rounded-xl p-5">
+            <div className="mb-5 flex items-center gap-2">
+              <SwapIcon className="h-5 w-5" />
+              <span className="text-xl font-bold">Quy trình lên đời</span>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {tradeInSteps.map((step, index) => {
+                const Icon = step.icon;
+                return (
+                  <div
+                    key={step.title}
+                    className="border-surface-container-highest rounded-xl border bg-white p-4">
+                    <div className="mb-3 flex items-center gap-3">
+                      <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white">
+                        {index + 1}
+                      </div>
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <h3 className="text-sm font-bold">{step.title}</h3>
+                    <p className="text-secondary mt-1 text-xs leading-relaxed">
+                      {step.desc}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="bg-accent/5 border-accent/20 mt-4 rounded-xl border p-4">
+              <p className="text-accent text-sm font-bold">
+                Giá dự kiến sau thu cũ: từ{' '}
+                {formatPrice(Math.max(totalPrice - tradeInEstimate, 0))}
+              </p>
+              <p className="text-secondary mt-1 text-xs">
+                Giá cuối cùng được xác nhận sau bước kiểm tra thiết bị cũ.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label className="mb-4 flex items-center gap-2 text-sm font-bold">
+            <ShieldCheck className="h-4 w-4" />
+            5. Chọn Samsung Care+
+          </label>
+          <div className="grid gap-3">
+            {carePlusOptions.map(option => (
+              <button
+                key={option.id}
+                onClick={() => setSelectedCare(option)}
+                className={`flex items-start gap-4 rounded-xl border-2 p-4 text-left transition-all ${selectedCare.id === option.id ? 'border-primary bg-white shadow-sm' : 'border-surface-container-highest bg-surface'}`}>
+                <div
+                  className={`mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border ${selectedCare.id === option.id ? 'border-primary bg-primary' : 'border-surface-container-highest'}`}>
+                  {selectedCare.id === option.id && (
+                    <CheckCircle className="fill-primary h-4 w-4 text-white" />
+                  )}
+                </div>
+                <div className="flex-1">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <p className="font-bold">{option.name}</p>
+                    <p className="text-sm font-bold">
+                      {option.price === 0
+                        ? 'Miễn phí'
+                        : formatPrice(option.price)}
+                    </p>
+                  </div>
+                  <p className="text-accent mt-1 text-xs font-bold">
+                    {option.term}
+                  </p>
+                  <p className="text-secondary mt-1 text-xs leading-relaxed">
+                    {option.desc}
+                  </p>
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Accordions */}
       <section className="border-surface-container-highest mt-12 border-t px-5">
         {[
           'Tính năng nổi bật',
@@ -222,7 +384,7 @@ export default function DetailPage() {
                 exit={{ height: 0, opacity: 0 }}
                 className="overflow-hidden">
                 <div className="space-y-6 pb-6">
-                  {item === 'Tính năng nổi bật' ? (
+                  {item === 'Tính năng nổi bật' &&
                     productFeatures['Tính năng nổi bật'].map((feature, idx) => (
                       <div key={idx} className="space-y-1">
                         <h4 className="text-primary text-sm font-bold">
@@ -232,12 +394,113 @@ export default function DetailPage() {
                           {feature.desc}
                         </p>
                       </div>
-                    ))
-                  ) : (
-                    <p className="text-secondary text-xs italic">
-                      Thông tin đang được cập nhật...
-                    </p>
+                    ))}
+
+                  {item === 'Đánh giá & Xếp hạng' && (
+                    <div className="space-y-6">
+                      <div className="rounded-xl bg-white p-5">
+                        <div className="grid gap-6 sm:grid-cols-[140px_1fr]">
+                          <div>
+                            <p className="text-5xl font-extrabold">
+                              {product.rating}
+                            </p>
+                            <div className="mt-2 flex">
+                              {[1, 2, 3, 4, 5].map(star => (
+                                <Star
+                                  key={star}
+                                  className="h-4 w-4"
+                                  strokeWidth={0}
+                                  fill="#ffaa4e"
+                                />
+                              ))}
+                            </div>
+                            <p className="text-secondary mt-2 text-xs">
+                              {product.reviews.toLocaleString()} đánh giá đã xác
+                              minh
+                            </p>
+                          </div>
+                          <div className="space-y-2">
+                            {product.ratingBreakdown.map(row => (
+                              <div
+                                key={row.stars}
+                                className="grid grid-cols-[36px_1fr_44px] items-center gap-3 text-xs">
+                                <span className="font-bold">
+                                  {row.stars} sao
+                                </span>
+                                <div className="bg-surface-container h-2 overflow-hidden rounded-full">
+                                  <div
+                                    className="h-full rounded-full bg-[#ffaa4e]"
+                                    style={{
+                                      width: `${(row.count / ratingMax) * 100}%`,
+                                    }}
+                                  />
+                                </div>
+                                <span className="text-secondary text-right">
+                                  {row.count}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2">
+                        {product.reviewHighlights.map(highlight => (
+                          <span
+                            key={highlight}
+                            className="bg-surface-container-low rounded-full px-3 py-2 text-xs font-bold">
+                            {highlight}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="space-y-3">
+                        {product.customerReviews.map(review => (
+                          <div
+                            key={review.name}
+                            className="rounded-xl bg-white p-4">
+                            <div className="flex items-start justify-between gap-4">
+                              <div>
+                                <p className="font-bold">{review.name}</p>
+                                <p className="text-secondary text-xs">
+                                  Người mua đã xác minh • {review.date}
+                                </p>
+                              </div>
+                              <div className="flex">
+                                {Array.from({ length: review.rating }).map(
+                                  (_, index) => (
+                                    <Star
+                                      key={index}
+                                      fill="#ffaa4e"
+                                      strokeWidth={0}
+                                      className="h-4 w-4"
+                                    />
+                                  ),
+                                )}
+                              </div>
+                            </div>
+                            <h4 className="mt-3 text-sm font-bold">
+                              {review.title}
+                            </h4>
+                            <p className="text-secondary mt-1 text-xs leading-relaxed">
+                              {review.content}
+                            </p>
+                            <button className="text-secondary mt-4 flex items-center gap-2 text-xs font-bold">
+                              <ThumbsUp className="h-4 w-4" />
+                              Hữu ích
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   )}
+
+                  {item !== 'Tính năng nổi bật' &&
+                    item !== 'Đánh giá & Xếp hạng' && (
+                      <p className="text-secondary text-xs italic">
+                        Thông tin đang được cập nhật...
+                      </p>
+                    )}
                 </div>
               </motion.div>
             )}
@@ -245,7 +508,6 @@ export default function DetailPage() {
         ))}
       </section>
 
-      {/* Galaxy AI Banner */}
       <section className="relative mx-5 my-12 flex min-h-40 flex-col justify-center overflow-hidden rounded-xl bg-black p-8 text-white">
         <div className="relative z-10">
           <h3 className="text-xl font-bold">Galaxy AI đã xuất hiện.</h3>
@@ -259,7 +521,6 @@ export default function DetailPage() {
         <Sparkles className="absolute -right-4 -bottom-4 h-40 w-40 rotate-12 opacity-20" />
       </section>
 
-      {/* Sticky Bar */}
       <div className="border-surface-container-highest fixed bottom-0 left-0 z-60 w-full border-t bg-white/95 p-5 shadow-[0_-8px_30px_rgb(0,0,0,0.04)] backdrop-blur-md sm:relative sm:mt-12 sm:bg-transparent sm:p-0 sm:shadow-none">
         <div className="mx-auto max-w-md sm:max-w-full">
           <div className="mb-4 flex items-end justify-between sm:hidden">
@@ -268,7 +529,7 @@ export default function DetailPage() {
                 Tổng cộng
               </p>
               <p className="text-2xl font-extrabold">
-                {selectedStorage.price.toLocaleString()}₫
+                {formatPrice(totalPrice)}
               </p>
             </div>
             <div className="text-right">
@@ -276,7 +537,7 @@ export default function DetailPage() {
                 Hoặc từ
               </p>
               <p className="text-base font-extrabold">
-                {Math.round(selectedStorage.price / 12).toLocaleString()}₫/tháng
+                {formatPrice(Math.round(totalPrice / 12))}/tháng
               </p>
             </div>
           </div>

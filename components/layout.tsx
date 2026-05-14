@@ -95,7 +95,9 @@ const Layout = ({ children }: PropsWithChildren) => {
               </span>
             )}
           </Link>
-          <User className="h-5 w-5 cursor-pointer" />
+          <Link href="/profile">
+            <User className="h-5 w-5 cursor-pointer" />
+          </Link>
         </div>
       </header>
 
