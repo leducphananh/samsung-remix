@@ -278,15 +278,6 @@ export function CarePlusSection({
                         price: option.price,
                       });
                       setIsCareModalOpen(true);
-
-                      if (selectedGroup) {
-                        onSelect({
-                          id: selectedGroup.id,
-                          title: selectedGroup.title,
-                          price: option.price,
-                          label: option.label,
-                        });
-                      }
                     }}>
                     <div className="flex-auto text-left text-[12px] font-bold md:flex-1 md:text-[14px]">
                       {option.label}
@@ -311,6 +302,21 @@ export function CarePlusSection({
         }}
         onAccept={() => {
           setIsCareModalOpen(false);
+
+          if (selectedGroup) {
+            const option = selectedOptions.find(
+              opt => opt.id === selectedCareOption,
+            );
+
+            if (option) {
+              onSelect({
+                id: selectedGroup.id,
+                title: selectedGroup.title,
+                price: option.price,
+                label: option.label,
+              });
+            }
+          }
         }}
       />
     </>
