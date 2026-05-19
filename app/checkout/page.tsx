@@ -108,7 +108,7 @@ export default function CheckoutPage() {
             </div>
           </div>
 
-          <div className="rounded-2xl bg-white p-5 shadow-sm">
+          {/* <div className="rounded-2xl bg-white p-5 shadow-sm">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-bold">Thông tin xuất hóa đơn</h3>
               <label className="relative inline-flex cursor-pointer items-center">
@@ -117,7 +117,7 @@ export default function CheckoutPage() {
                 <span className="absolute top-1 left-1 h-5 w-5 rounded-full bg-white transition-transform peer-checked:translate-x-5" />
               </label>
             </div>
-          </div>
+          </div> */}
 
           <Terms />
 
