@@ -18,6 +18,7 @@ const Terms = ({ onCompletionChange }: TermsProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const isDrawingRef = useRef(false);
   const lastPointRef = useRef<{ x: number; y: number } | null>(null);
+  const signatureDataUrlRef = useRef<string | null>(null);
 
   const allTermsAccepted = acceptedChecks.every(Boolean);
   const signatureReady =
@@ -33,6 +34,8 @@ const Terms = ({ onCompletionChange }: TermsProps) => {
 
     if (!canvas || !container) return;
 
+    const previousSignature = signatureDataUrlRef.current;
+
     canvas.width = container.clientWidth;
     canvas.height = container.clientHeight;
 
@@ -41,6 +44,14 @@ const Terms = ({ onCompletionChange }: TermsProps) => {
       ctx.lineWidth = 2;
       ctx.lineCap = 'round';
       ctx.strokeStyle = '#111111';
+    }
+
+    if (ctx && previousSignature) {
+      const image = new Image();
+      image.onload = () => {
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      };
+      image.src = previousSignature;
     }
   };
 
@@ -105,6 +116,10 @@ const Terms = ({ onCompletionChange }: TermsProps) => {
     }
     isDrawingRef.current = false;
     lastPointRef.current = null;
+
+    if (canvas) {
+      signatureDataUrlRef.current = canvas.toDataURL('image/png');
+    }
   };
 
   const handleClearSignature = () => {
@@ -115,6 +130,7 @@ const Terms = ({ onCompletionChange }: TermsProps) => {
     }
     setHasSignature(false);
     setSignatureConfirmed(false);
+    signatureDataUrlRef.current = null;
   };
 
   const handleConfirmSignature = () => {
@@ -126,6 +142,7 @@ const Terms = ({ onCompletionChange }: TermsProps) => {
     const dataUrl = canvas?.toDataURL('image/png');
     // dataUrl là ảnh chữ ký dạng base64
     console.log(dataUrl);
+    signatureDataUrlRef.current = dataUrl ?? null;
 
     setSignatureConfirmed(true);
     setIsSignatureOpen(false);
