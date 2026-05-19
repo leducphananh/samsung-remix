@@ -13,6 +13,8 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
+import Terms from './_components/terms';
 
 export default function CartPage() {
   const {
@@ -20,6 +22,7 @@ export default function CartPage() {
     removeFromCart: onRemove,
     cartItems: items,
   } = useCart();
+  const [isCheckoutReady, setIsCheckoutReady] = useState(false);
 
   const subtotal = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -61,11 +64,6 @@ export default function CartPage() {
               className="space-y-6 rounded-2xl bg-white p-5 shadow-sm">
               <div className="flex gap-4">
                 <div className="bg-surface-container h-24 w-24 rounded-lg p-2">
-                  {/* <img
-                    src={item.image}
-                    alt={item.name}
-                    className="h-full w-full object-contain"
-                  /> */}
                   <Image
                     src={item.image}
                     alt={item.name}
@@ -171,11 +169,6 @@ export default function CartPage() {
           <div className="rounded-2xl bg-white p-5 shadow-sm">
             <div className="flex gap-4">
               <div className="bg-surface-container h-20 w-20 rounded-lg p-2">
-                {/* <img
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeavh-9YaFxA6Ik8Fo22JyGOrVDrpJi7QKRYPBcIR_jekKV8XbeDshv2mIFTg-mXqIoKfpje4pjy4IFSgjqUJulb8xXpQ5YgI23rwN80ycWzMXOhg-_2TdxDaamOlEvBkVfOMR4I4hoemJ42Faez911lewp3WMV47jyVpy8NRsyVU1NpfckB9ELQd9rTS8t7e4P21KnNO4moOiu0T26X0UhjCdG9O7eWxKdtVL1DpTu_wRYCHxRBcrqHJxgUfYieURk46Mt17Fh6w"
-                  alt="Charger"
-                  className="h-full w-full object-contain grayscale"
-                /> */}
                 <Image
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeavh-9YaFxA6Ik8Fo22JyGOrVDrpJi7QKRYPBcIR_jekKV8XbeDshv2mIFTg-mXqIoKfpje4pjy4IFSgjqUJulb8xXpQ5YgI23rwN80ycWzMXOhg-_2TdxDaamOlEvBkVfOMR4I4hoemJ42Faez911lewp3WMV47jyVpy8NRsyVU1NpfckB9ELQd9rTS8t7e4P21KnNO4moOiu0T26X0UhjCdG9O7eWxKdtVL1DpTu_wRYCHxRBcrqHJxgUfYieURk46Mt17Fh6w"
                   alt="Charger"
@@ -225,6 +218,11 @@ export default function CartPage() {
               </button>
             </div>
 
+            <div className="bg-surface-container flex items-center justify-between rounded-lg px-4 py-3 text-sm">
+              <span className="font-semibold">Bảo hiểm MIC</span>
+              <span className="text-accent font-bold">0 đồng</span>
+            </div>
+
             <div className="space-y-3">
               <h4 className="mb-4 text-lg font-bold">Bản tóm tắt</h4>
               <div className="flex justify-between text-sm">
@@ -268,34 +266,13 @@ export default function CartPage() {
               </div>
             </div>
 
-            <div className="bg-surface-container-low space-y-3 rounded-xl p-4">
-              <p className="text-secondary text-[11px] leading-relaxed italic">
-                Đăng nhập để được cộng điểm Samsung Rewards và nhận các ưu đãi
-                đặc quyền
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold">
-                  Tích điểm thưởng Samsung Rewards cho đơn hàng này
-                </span>
-                <Info className="text-secondary h-3 w-3" />
-              </div>
-            </div>
+            <Terms onCompletionChange={setIsCheckoutReady} />
 
-            <button className="bg-accent shadow-accent/20 w-full rounded-full py-4 text-base font-bold text-white shadow-lg transition-transform active:scale-[0.98]">
+            <button
+              disabled={!isCheckoutReady}
+              className={`w-full rounded-full py-4 text-base font-bold shadow-lg transition-transform ${isCheckoutReady ? 'bg-accent shadow-accent/20 text-white active:scale-[0.98]' : 'bg-surface-container-highest text-secondary cursor-not-allowed'}`}>
               Thanh Toán
             </button>
-
-            <p className="text-secondary px-4 text-center text-[10px] leading-relaxed">
-              Bằng cách gửi đơn đặt hàng, bạn đồng ý với{' '}
-              <Link href="#" className="font-bold underline">
-                Điều khoản & điều kiện
-              </Link>{' '}
-              và chúng tôi sẽ sử dụng dữ liệu cá nhân của bạn theo{' '}
-              <Link href="#" className="font-bold underline">
-                Chính sách quyền riêng tư
-              </Link>{' '}
-              của chúng tôi.
-            </p>
 
             <div className="border-surface-container space-y-4 border-t pt-6">
               <div className="flex items-center gap-3">
