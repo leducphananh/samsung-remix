@@ -58,7 +58,7 @@ const adBanners = [
 
 const products: Product[] = [
   {
-    id: 's24-ultra',
+    id: 's26-ultra',
     name: 'Galaxy S26 Ultra',
     price: '33.990.000 VNĐ',
     rating: 4.8,
@@ -94,7 +94,7 @@ const products: Product[] = [
     isNew: true,
   },
   {
-    id: 's24-plus',
+    id: 's26-plus',
     name: 'Galaxy S26+',
     price: '26.990.000 VNĐ',
     rating: 4.7,
@@ -130,7 +130,7 @@ const products: Product[] = [
     isNew: false,
   },
   {
-    id: 'a54',
+    id: 's26',
     name: 'Galaxy S26',
     price: '10.490.000 VNĐ',
     rating: 4.5,

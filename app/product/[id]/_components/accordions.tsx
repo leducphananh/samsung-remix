@@ -1,10 +1,10 @@
 import { ChevronDown, Star, ThumbsUp } from 'lucide-react';
 import { motion } from 'motion/react';
 
-import type { Product } from '../_data/product.data';
+import { ProductDetail } from '@/types/product.type';
 import { accordionItems, productFeatures } from '../_data/product.data';
 
-function RatingsPanel({ product }: { product: Product }) {
+function RatingsPanel({ product }: { product: ProductDetail }) {
   const ratingMax = Math.max(
     ...product.ratingBreakdown.map(item => item.count),
   );
@@ -99,7 +99,7 @@ export function AccordionsSection({
   openAccordions,
   onToggle,
 }: {
-  product: Product;
+  product: ProductDetail;
   openAccordions: string[];
   onToggle: (item: string) => void;
 }) {

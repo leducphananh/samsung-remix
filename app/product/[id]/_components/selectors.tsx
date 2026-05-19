@@ -1,21 +1,16 @@
-import { CheckCircle, ShieldCheck } from 'lucide-react';
-
-import { formatPrice } from '@/utils/price.util';
-
-import clsx from 'clsx';
-import { useState } from 'react';
-import type {
-  CarePlusOption,
-  CarePlusSelection,
-  Product,
-  ProductColor,
+import {
+  ProductDetail,
+  ProductDetailVariant,
   ProductStorage,
-} from '../_data/product.data';
-import { tradeOptions } from '../_data/trade.data';
+} from '@/types/product.type';
+import { formatPrice } from '@/utils/price.util';
+import clsx from 'clsx';
+import { CheckCircle, ShieldCheck } from 'lucide-react';
+import { useState } from 'react';
+import type { CarePlusOption, CarePlusSelection } from '../_data/product.data';
 import SamsungCareModal from './samsung-care-modal';
-import TradeInModal from './trade-in-modal/trade-in-modal';
 
-export function ProductSelector({ product }: { product: Product }) {
+export function ProductSelector({ product }: { product: ProductDetail }) {
   return (
     <div>
       <label className="mb-4 block text-sm font-bold">1. Chọn dòng máy</label>
@@ -33,28 +28,33 @@ export function ProductSelector({ product }: { product: Product }) {
 }
 
 export function ColorPicker({
-  colors,
+  variants,
   selectedColor,
   onSelect,
 }: {
-  colors: readonly ProductColor[];
-  selectedColor: ProductColor;
-  onSelect: (color: ProductColor) => void;
+  variants: ProductDetailVariant[];
+  selectedColor: ProductDetailVariant;
+  onSelect: (color: ProductDetailVariant) => void;
 }) {
   return (
     <div>
       <label className="mb-1 block text-sm font-bold">2. Chọn màu sắc</label>
       <p className="mb-4 text-sm">{selectedColor.name}</p>
       <div className="flex gap-4">
-        {colors.map(color => (
+        {variants.map(variant => (
           <button
-            key={color.name}
-            onClick={() => onSelect(color)}
-            aria-label={color.name}
-            className={`h-12 w-12 rounded-full border-2 p-0.5 transition-all ${selectedColor.name === color.name ? 'border-primary' : 'border-transparent'}`}>
+            key={variant.name}
+            onClick={() => onSelect(variant)}
+            aria-label={variant.name}
+            className={clsx(
+              'h-12 w-12 rounded-full border-2 p-0.5 transition-all',
+              selectedColor.name === variant.name
+                ? 'border-primary'
+                : 'border-transparent',
+            )}>
             <div
-              className="h-full w-full rounded-full"
-              style={{ backgroundColor: color.value }}
+              className="h-full w-full rounded-full border border-[#ddd]"
+              style={{ backgroundColor: variant.hex }}
             />
           </button>
         ))}
@@ -68,7 +68,7 @@ export function StorageSelector({
   selectedStorage,
   onSelect,
 }: {
-  storage: readonly ProductStorage[];
+  storage: ProductStorage[];
   selectedStorage: ProductStorage;
   onSelect: (storage: ProductStorage) => void;
 }) {
@@ -91,82 +91,6 @@ export function StorageSelector({
         ))}
       </div>
     </div>
-  );
-}
-
-export function TradeInSection() {
-  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
-  const [isTradeInModalOpen, setIsTradeInModalOpen] = useState(false);
-
-  return (
-    <>
-      <div className="space-y-4">
-        <div>
-          <label className="mb-1 block text-sm font-bold">
-            4. Thu cũ đổi mới
-          </label>
-          <p className="text-primary text-sm">
-            Tiết kiệm lên đến <b>18 TRIỆU đồng</b> khi bạn tham gia thu cũ một
-            thiết bị đủ điều kiện!{'\n'}Áp dụng thu cũ đổi mới nhiều thiết bị di
-            động khác nhau từ nhiều thương hiệu khác nhau
-          </p>
-        </div>
-
-        <ul className="mt-6 grid grid-cols-1 gap-2 md:grid-cols-2 md:gap-4">
-          {tradeOptions.map(option => {
-            const isSelected = option.id === selectedOptionId;
-
-            return (
-              <li key={option.id} className="col-span-1">
-                <button
-                  type="button"
-                  className={clsx(
-                    'flex h-full w-full items-center justify-between rounded-xl border-2 p-4 text-left transition-all md:p-5.5',
-                    isSelected
-                      ? 'border-primary bg-white shadow-sm'
-                      : 'border-surface-container-highest bg-surface',
-                  )}
-                  onClick={() => {
-                    setSelectedOptionId(option.id);
-
-                    if (option.id === 'trade-in') {
-                      setIsTradeInModalOpen(true);
-                    }
-                  }}>
-                  <div className="text-[16px] font-bold md:text-[18px]">
-                    {option.label}
-                  </div>
-                  {option.detailTitle && (
-                    <div className="space-y-1">
-                      <div className="text-right text-[12px] text-[#757575] md:text-[14px]">
-                        {option.detailTitle}
-                      </div>
-                      <p className="text-[12px] text-[#757575] md:text-[14px]">
-                        <em className="text-[14px] text-[#006bea] not-italic md:text-[16px]">
-                          {option.detailRange?.start}
-                        </em>{' '}
-                        đến{' '}
-                        <em className="text-[14px] text-[#006bea] not-italic md:text-[16px]">
-                          {option.detailRange?.end}
-                        </em>
-                      </p>
-                    </div>
-                  )}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-
-      <TradeInModal
-        isOpen={isTradeInModalOpen}
-        onClose={() => {
-          setIsTradeInModalOpen(false);
-          setSelectedOptionId('no-thanks');
-        }}
-      />
-    </>
   );
 }
 
@@ -198,8 +122,13 @@ export function CarePlusSection({
       <div>
         <label className="mb-4 flex items-center gap-2 text-sm font-bold">
           <ShieldCheck className="h-4 w-4" />
-          5. Chọn Samsung Care+
+          4. Chọn Samsung Care+
         </label>
+        <div className="text-secondary mb-4 space-y-1 text-xs">
+          <p>Mua kèm bảo hiểm MIC - 0 đồng</p>
+          <p>Phí vận chuyển - 0d</p>
+          <p>Bảo hành - 0d</p>
+        </div>
 
         <ul className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-4 md:gap-4">
           {options.map(option => {

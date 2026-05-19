@@ -1,8 +1,7 @@
+import { ProductDetail } from '@/types/product.type';
 import { Star } from 'lucide-react';
 
-import type { Product } from '../_data/product.data';
-
-export function ProductHeader({ product }: { product: Product }) {
+export function ProductHeader({ product }: { product: ProductDetail }) {
   return (
     <section className="px-5 pt-8">
       <h1 className="text-2xl font-bold">{product.name}</h1>

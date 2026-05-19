@@ -1,55 +1,127 @@
-export const products = {
-  's24-ultra': {
-    name: 'Galaxy S24 Ultra',
-    price: 33990000,
-    rating: 4.7,
-    reviews: 1248,
-    image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuC1tJp-G6ehRlr--Sr4U4Z6wbXU6u5CEjdarbODlnXfH3jo1WZKUeRW5aDkdaGw0zVs9AJbJSMtYi_Ij_satv9N8tgyk8AT1mPCRjG7IY3Au39hheLPBSM5M1oUe-d4ufOTOoa-MMtAk0AFAQc-SSA9DK-p1QcTXLgg7eovnAWa_fazTgSrHwrvQDnzh8w2nmz8PZMNwQqcRy-qO-uop4m0O0XwHRvlJoLyfAqK74EuppjXdXJQ3A7A6a4zljhHIv0_vaWNrxL9rH0',
-    colors: [
-      { name: 'Xám Titanium', value: '#8E8E8E' },
-      { name: 'Đen Titanium', value: '#1A1A1A' },
-      { name: 'Tím Titanium', value: '#5C5070' },
-      { name: 'Vàng Titanium', value: '#F3E5AB' },
-    ],
-    storage: [
-      { size: '256 GB', price: 33990000 },
-      { size: '512 GB', price: 37490000 },
-      { size: '1 TB', price: 44490000 },
-    ],
-    ratingBreakdown: [
-      { stars: 5, count: 936 },
-      { stars: 4, count: 212 },
-      { stars: 3, count: 74 },
-      { stars: 2, count: 18 },
-      { stars: 1, count: 8 },
-    ],
-    reviewHighlights: [
-      'Camera zoom rất sắc nét',
-      'Pin dùng trọn ngày',
-      'Màn hình sáng ngoài trời',
-      'Galaxy AI hữu ích',
-    ],
-    customerReviews: [
-      {
-        name: 'Minh Anh',
-        rating: 5,
-        date: '12/05/2026',
-        title: 'Camera và màn hình đúng chất flagship',
-        content:
-          'Ảnh zoom xa vẫn chi tiết, màn hình ngoài nắng nhìn rõ. Máy cầm chắc tay hơn mình nghĩ.',
-      },
-      {
-        name: 'Hoàng Nam',
-        rating: 4,
-        date: '08/05/2026',
-        title: 'Hiệu năng mạnh, AI tiện',
-        content:
-          'Dịch cuộc gọi và tóm tắt ghi chú dùng được ngay trong công việc. Máy hơi lớn nhưng pin rất ổn.',
-      },
-    ],
-  },
-} as const;
+import { ProductDetail } from '@/types/product.type';
+
+export const productDetail: ProductDetail = {
+  id: 's26-ultra',
+  name: 'Galaxy S26 Ultra',
+  price: 33990000,
+  rating: 4.7,
+  reviews: 1248,
+  variants: [
+    {
+      id: 1,
+      name: 'Trắng Classic',
+      hex: '#f3f4f5',
+      slides: [
+        {
+          src: 'https://images.samsung.com/is/image/samsung/p6pim/vn/s2602/gallery/vn-galaxy-s26-ultra-s948-sm-s948bzwcxxv-thumb-550804953?imbypass=true',
+          alt: 'Galaxy S26 Ultra Front White ',
+        },
+        {
+          src: 'https://images.samsung.com/is/image/samsung/p6pim/vn/s2602/gallery/vn-galaxy-s26-ultra-s948-sm-s948bzwcxxv-thumb-550804934?imbypass=true',
+          alt: 'Galaxy S26 Ultra DeviceBackL30 White ',
+        },
+        {
+          src: 'https://images.samsung.com/is/image/samsung/p6pim/vn/s2602/gallery/vn-galaxy-s26-ultra-s948-sm-s948bzwcxxv-thumb-550804935?imbypass=true',
+          alt: 'Galaxy S26 Ultra DeviceBackR30 White ',
+        },
+      ],
+    },
+    {
+      id: 2,
+      name: 'Xanh Sky Blue',
+      hex: '#b3cbd9',
+      slides: [
+        {
+          src: 'https://images.samsung.com/is/image/samsung/p6pim/vn/s2602/gallery/vn-galaxy-s26-ultra-s948-sm-s948blbcxxv-thumb-550804058?imbypass=true',
+          alt: 'Galaxy S26 Ultra Front Sky Blue ',
+        },
+        {
+          src: 'https://images.samsung.com/is/image/samsung/p6pim/vn/s2602/gallery/vn-galaxy-s26-ultra-s948-sm-s948blbcxxv-thumb-550804039?imbypass=true',
+          alt: 'Galaxy S26 Ultra DeviceBackL30 Sky Blue ',
+        },
+        {
+          src: 'https://images.samsung.com/is/image/samsung/p6pim/vn/s2602/gallery/vn-galaxy-s26-ultra-s948-sm-s948blbcxxv-thumb-550804040?imbypass=true',
+          alt: 'Galaxy S26 Ultra DeviceBackR30 Sky Blue ',
+        },
+      ],
+    },
+    {
+      id: 3,
+      name: 'Đen Classic',
+      hex: '#494d53',
+      slides: [
+        {
+          src: 'https://images.samsung.com/is/image/samsung/p6pim/vn/s2602/gallery/vn-galaxy-s26-ultra-s948-sm-s948bzkcxxv-thumb-550804317?imbypass=true',
+          alt: 'Galaxy S26 Ultra Front Black ',
+        },
+        {
+          src: 'https://images.samsung.com/is/image/samsung/p6pim/vn/s2602/gallery/vn-galaxy-s26-ultra-s948-sm-s948bzkcxxv-thumb-550804309?imbypass=true',
+          alt: 'Galaxy S26 Ultra DeviceBackL30 Black ',
+        },
+        {
+          src: 'https://images.samsung.com/is/image/samsung/p6pim/vn/s2602/gallery/vn-galaxy-s26-ultra-s948-sm-s948bzkcxxv-thumb-550804298?imbypass=true',
+          alt: 'Galaxy S26 Ultra DeviceBackR30 Black ',
+        },
+      ],
+    },
+    {
+      id: 4,
+      name: 'Tím Cobalt',
+      hex: '#686884',
+      slides: [
+        {
+          src: 'https://images.samsung.com/is/image/samsung/p6pim/vn/s2602/gallery/vn-galaxy-s26-ultra-s948-sm-s948bzvcxxv-thumb-550804756?imbypass=true',
+          alt: 'Galaxy S26 Ultra Front Cobalt Violet ',
+        },
+        {
+          src: 'https://images.samsung.com/is/image/samsung/p6pim/vn/s2602/gallery/vn-galaxy-s26-ultra-s948-sm-s948bzvcxxv-thumb-550804737?imbypass=true',
+          alt: 'Galaxy S26 Ultra DeviceBackL30 Cobalt Violet ',
+        },
+        {
+          src: 'https://images.samsung.com/is/image/samsung/p6pim/vn/s2602/gallery/vn-galaxy-s26-ultra-s948-sm-s948bzvcxxv-thumb-550804738?imbypass=true',
+          alt: 'Galaxy S26 Ultra DeviceBackR30 Cobalt Violet ',
+        },
+      ],
+      default: true,
+    },
+  ],
+  storage: [
+    { size: '256 GB', price: 33990000 },
+    { size: '512 GB', price: 37490000 },
+    { size: '1 TB', price: 44490000 },
+  ],
+  ratingBreakdown: [
+    { stars: 5, count: 936 },
+    { stars: 4, count: 212 },
+    { stars: 3, count: 74 },
+    { stars: 2, count: 18 },
+    { stars: 1, count: 8 },
+  ],
+  reviewHighlights: [
+    'Camera zoom rất sắc nét',
+    'Pin dùng trọn ngày',
+    'Màn hình sáng ngoài trời',
+    'Galaxy AI hữu ích',
+  ],
+  customerReviews: [
+    {
+      name: 'Minh Anh',
+      rating: 5,
+      date: '12/05/2026',
+      title: 'Camera và màn hình đúng chất flagship',
+      content:
+        'Ảnh zoom xa vẫn chi tiết, màn hình ngoài nắng nhìn rõ. Máy cầm chắc tay hơn mình nghĩ.',
+    },
+    {
+      name: 'Hoàng Nam',
+      rating: 4,
+      date: '08/05/2026',
+      title: 'Hiệu năng mạnh, AI tiện',
+      content:
+        'Dịch cuộc gọi và tóm tắt ghi chú dùng được ngay trong công việc. Máy hơi lớn nhưng pin rất ổn.',
+    },
+  ],
+};
 
 export const carePlusOptions = [
   {
@@ -133,9 +205,6 @@ export const accordionItems = [
   'Đánh giá & Xếp hạng',
 ] as const;
 
-export type Product = (typeof products)[keyof typeof products];
-export type ProductColor = Product['colors'][number];
-export type ProductStorage = Product['storage'][number];
 export interface CarePlusOption {
   id: string;
   title: string;
