@@ -41,7 +41,12 @@ const Contract = () => {
           requiredMark
           placeholder="Nhập số điện thoại"
         />
-        <FormInput label="Ngày sinh" requiredMark placeholder="dd/mm/yyyy" />
+        <FormInput
+          label="Ngày sinh"
+          requiredMark
+          placeholder="dd/mm/yyyy"
+          type="date"
+        />
 
         <div>
           <div className="text-sm font-semibold">Quốc tịch</div>
