@@ -1,6 +1,6 @@
 'use client';
 
-import Select from '@/components/select';
+import Select from '@/components/common/select';
 import { formatTradeInValue } from '@/utils/price.util';
 import clsx from 'clsx';
 import { Smartphone, Tablet, Watch } from 'lucide-react';

@@ -1,6 +1,6 @@
 'use client';
 
-import TextInput from '@/components/text-input';
+import TextInput from '@/components/common/text-input';
 import { Smartphone } from 'lucide-react';
 
 interface SerialStepProps {

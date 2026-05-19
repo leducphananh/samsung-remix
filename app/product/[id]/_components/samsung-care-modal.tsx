@@ -1,6 +1,6 @@
 'use client';
 
-import Modal from '@/components/modal';
+import Modal from '@/components/common/modal';
 import { formatPrice } from '@/utils/price.util';
 import clsx from 'clsx';
 import { Check } from 'lucide-react';

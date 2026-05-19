@@ -5,3 +5,7 @@ export const formatVnd = (value: number) =>
 
 export const formatTradeInValue = (value: number) =>
   `${new Intl.NumberFormat('vi-VN').format(value)} ₫`;
+
+export const parsePrice = (priceStr: string) => {
+  return parseInt(priceStr.replace(/\D/g, ''));
+};
