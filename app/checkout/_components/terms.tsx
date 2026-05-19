@@ -1,5 +1,4 @@
 'use client';
-
 import Checkbox from '@/components/common/checkbox';
 import { ChevronUp } from 'lucide-react';
 import Link from 'next/link';
@@ -12,6 +11,15 @@ type TermsProps = {
 const Terms = ({ onCompletionChange }: TermsProps) => {
   const [acceptedChecks, setAcceptedChecks] = useState(Array(5).fill(false));
 
+  const updateCheckAt = (index: number, checked: boolean) => {
+    setAcceptedChecks(prev => {
+      const next = [...prev];
+      next[index] = checked;
+      next[4] = next.slice(0, 4).every(Boolean);
+      return next;
+    });
+  };
+
   const allTermsAccepted = acceptedChecks.every(Boolean);
 
   useEffect(() => {
@@ -22,13 +30,13 @@ const Terms = ({ onCompletionChange }: TermsProps) => {
     <>
       <div className="border-surface-container-highest space-y-3 rounded-2xl border bg-white p-4 shadow-sm">
         <div className="flex items-center justify-between">
-          <div className="text-sm font-bold">Điều khoản và Điều kiện</div>
+          <div className="text-[18px] font-bold">Điều khoản và Điều kiện</div>
           <ChevronUp className="text-secondary h-4 w-4" />
         </div>
 
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-secondary text-xs font-semibold">
+            <span className="text-secondary text-[14px] font-semibold">
               Điều khoản sử dụng
             </span>
           </div>
@@ -39,11 +47,7 @@ const Terms = ({ onCompletionChange }: TermsProps) => {
                 className="mt-0.5"
                 checked={acceptedChecks[0]}
                 ariaLabel="Điều khoản và điều kiện cơ bản Samsung"
-                onChange={checked => {
-                  const next = [...acceptedChecks];
-                  next[0] = checked;
-                  setAcceptedChecks(next);
-                }}
+                onChange={checked => updateCheckAt(0, checked)}
               />
               <div>
                 <div className="font-semibold">
@@ -59,11 +63,7 @@ const Terms = ({ onCompletionChange }: TermsProps) => {
                 className="mt-0.5"
                 checked={acceptedChecks[1]}
                 ariaLabel="Chương trình bảo hiểm thiết bị điện tử MIC"
-                onChange={checked => {
-                  const next = [...acceptedChecks];
-                  next[1] = checked;
-                  setAcceptedChecks(next);
-                }}
+                onChange={checked => updateCheckAt(1, checked)}
               />
               <div>
                 <div className="font-semibold">
@@ -79,11 +79,7 @@ const Terms = ({ onCompletionChange }: TermsProps) => {
                 className="mt-0.5"
                 checked={acceptedChecks[2]}
                 ariaLabel="Điều khoản và điều kiện STEC"
-                onChange={checked => {
-                  const next = [...acceptedChecks];
-                  next[2] = checked;
-                  setAcceptedChecks(next);
-                }}
+                onChange={checked => updateCheckAt(2, checked)}
               />
               <div>
                 <div className="font-semibold">
@@ -99,11 +95,7 @@ const Terms = ({ onCompletionChange }: TermsProps) => {
                 className="mt-0.5"
                 checked={acceptedChecks[3]}
                 ariaLabel="Đã hiểu về số tiền trả góp hằng tháng"
-                onChange={checked => {
-                  const next = [...acceptedChecks];
-                  next[3] = checked;
-                  setAcceptedChecks(next);
-                }}
+                onChange={checked => updateCheckAt(3, checked)}
               />
               <div className="font-semibold">
                 Tôi đã hiểu về số tiền trả góp hằng tháng và ngày thanh toán
@@ -112,15 +104,19 @@ const Terms = ({ onCompletionChange }: TermsProps) => {
             </label>
           </div>
 
-          <label className="border-surface-container-highest text-secondary flex items-start gap-2 border-t pt-3 text-[11px]">
+          <label className="border-surface-container-highest text-secondary flex items-start gap-2 border-t pt-3 text-[14px]">
             <Checkbox
               className="mt-0.5"
               checked={acceptedChecks[4]}
               ariaLabel="Đã đọc và hiểu đầy đủ các điều khoản"
               onChange={checked => {
-                const next = [...acceptedChecks];
-                next[4] = checked;
-                setAcceptedChecks(next);
+                setAcceptedChecks([
+                  checked,
+                  checked,
+                  checked,
+                  checked,
+                  checked,
+                ]);
               }}
             />
             <span>

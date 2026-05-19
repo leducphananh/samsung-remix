@@ -348,7 +348,7 @@ export default function DiscoveryPage() {
       </section>
 
       {/* Promo */}
-      <section className="px-5 py-12">
+      {/* <section className="px-5 py-12">
         <div className="relative flex flex-col items-center overflow-hidden rounded-2xl bg-black p-8 text-center text-white">
           <div className="z-10">
             <h2 className="mb-4 text-2xl font-bold">
@@ -370,7 +370,7 @@ export default function DiscoveryPage() {
             />
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }

@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { AccordionsSection } from './_components/accordions';
 import { ProductHeader } from './_components/header';
 import { ProductHero } from './_components/hero';
-import { PromoSection } from './_components/promo-section';
 import {
   CarePlusSection,
   ColorPicker,
@@ -86,7 +85,6 @@ export default function DetailPage() {
         openAccordions={openAccordions}
         onToggle={toggleAccordion}
       />
-      <PromoSection />
       <StickyAddToCart totalPrice={totalPrice} onAddToCart={handleAddToCart} />
     </div>
   );
