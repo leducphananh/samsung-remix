@@ -9,11 +9,15 @@ const FloatingHotlineButton = () => {
   const pathname = usePathname();
   const [isHotlineOpen, setIsHotlineOpen] = useState(false);
 
+  const shouldOffset = ['/product', '/cart', '/checkout'].some(segment =>
+    pathname.includes(segment),
+  );
+
   return (
     <div
       className={clsx(
         'fixed right-6 z-40 flex flex-col items-end gap-3',
-        pathname.includes('/product') ? 'bottom-40' : 'bottom-22',
+        shouldOffset ? 'bottom-40' : 'bottom-22',
       )}>
       <AnimatePresence>
         {isHotlineOpen && (
