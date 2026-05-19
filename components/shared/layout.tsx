@@ -1,13 +1,11 @@
 'use client';
 import { useCart } from '@/providers/cart.provider';
 import { useSearchQuery } from '@/providers/search-query.provider';
-import clsx from 'clsx';
 import {
   Facebook,
   Headphones,
   Instagram,
   Menu,
-  Phone,
   Search,
   ShoppingCart,
   Smartphone,
@@ -20,12 +18,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { PropsWithChildren, useState } from 'react';
+import FloatingHotlineButton from './floating-hotline-button';
+import MobileDrawer from './mobile-drawer';
 
 const Layout = ({ children }: PropsWithChildren) => {
   const { searchQuery, setSearchQuery } = useSearchQuery();
   const { totalQty: cartCount } = useCart();
   const [showSearch, setShowSearch] = useState(false);
-  const [isHotlineOpen, setIsHotlineOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const pathname = usePathname();
 
   return (
@@ -40,7 +40,12 @@ const Layout = ({ children }: PropsWithChildren) => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -10 }}
               className="flex items-center gap-4">
-              <Menu className="h-6 w-6 cursor-pointer" />
+              <button
+                onClick={() => setIsDrawerOpen(true)}
+                aria-label="Mở danh mục"
+                className="flex items-center">
+                <Menu className="h-6 w-6" />
+              </button>
               <Link
                 href="/"
                 className="text-xl font-extrabold tracking-tighter">
@@ -200,38 +205,14 @@ const Layout = ({ children }: PropsWithChildren) => {
         </button>
       </nav>
 
-      {/* Floating Hotline Button */}
-      <div
-        className={clsx(
-          'fixed right-6 z-60 flex flex-col items-end gap-3',
-          pathname.includes('/product') ? 'bottom-40' : 'bottom-22',
-        )}>
-        <AnimatePresence>
-          {isHotlineOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 12 }}
-              className="bg-surface-container-highest border-surface-container-high rounded-2xl border p-4 shadow-xl">
-              <p className="text-sm font-bold">
-                Hotline: 024 6688 5784 – 024 6688 5764
-              </p>
-              <p className="text-secondary mt-2 max-w-xs text-xs leading-relaxed">
-                Nếu Quý khách có thắc mắc hoặc cần tư vấn về sản phẩm, vui lòng
-                liên hệ qua hotline của chúng tôi để được giải đáp nhanh nhất
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
+      {/* Drawer */}
+      <MobileDrawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+      />
 
-        <button
-          onClick={() => setIsHotlineOpen(prev => !prev)}
-          aria-expanded={isHotlineOpen}
-          aria-label="Hotline"
-          className="bg-primary shadow-primary/30 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg transition-transform hover:scale-105 active:scale-95">
-          <Phone className="h-6 w-6" />
-        </button>
-      </div>
+      {/* Floating Hotline Button */}
+      <FloatingHotlineButton />
     </div>
   );
 };

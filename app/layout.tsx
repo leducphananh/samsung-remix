@@ -1,4 +1,4 @@
-import Layout from '@/components/common/layout';
+import Layout from '@/components/shared/layout';
 import AppProvider from '@/providers/app.provider';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
