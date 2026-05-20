@@ -1,7 +1,7 @@
 'use client';
 import { X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 interface Props {
@@ -10,6 +10,8 @@ interface Props {
 }
 
 const MobileDrawer = ({ isOpen, onClose }: Props) => {
+  const router = useRouter();
+
   useEffect(() => {
     if (!isOpen) {
       document.body.style.overflow = '';
@@ -23,6 +25,13 @@ const MobileDrawer = ({ isOpen, onClose }: Props) => {
       document.body.style.overflow = previousOverflow;
     };
   }, [isOpen]);
+
+  const handleCategoryClick = (category: string) => {
+    if (['Galaxy S', 'Galaxy Z', 'Galaxy A', 'Phụ kiện'].includes(category)) {
+      router.push(`/product-list?category=${encodeURIComponent(category)}`);
+      onClose();
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -57,15 +66,13 @@ const MobileDrawer = ({ isOpen, onClose }: Props) => {
                 { label: 'Galaxy Z', href: '/?category=Galaxy%20Z' },
                 { label: 'Galaxy A', href: '/?category=Galaxy%20A' },
                 { label: 'Phụ kiện', href: '/?category=Phụ%20kiện' },
-                { label: 'Đồng hồ', href: '/?category=Đồng%20hồ' },
               ].map(item => (
-                <Link
+                <button
                   key={item.label}
-                  href={item.href}
-                  onClick={onClose}
+                  onClick={() => handleCategoryClick(item.label)}
                   className="border-surface-container-highest hover:bg-surface-container-low flex items-center justify-between rounded-xl border px-4 py-3 text-sm font-semibold transition-colors">
                   {item.label}
-                </Link>
+                </button>
               ))}
             </div>
 

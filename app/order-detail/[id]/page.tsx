@@ -1,9 +1,11 @@
 'use client';
+import BottomSheet from '@/components/common/bottom-sheet';
+import Modal from '@/components/common/modal';
 import { ChevronRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { useState } from 'react';
 
 const ordersData = {
   '#ORD-2026-00724': {
@@ -37,6 +39,8 @@ export default function OrderDetailPage() {
   const { id } = useParams<{ id: string }>();
   const order =
     ordersData[id as keyof typeof ordersData] || ordersData['#ORD-2026-00724'];
+  const [isCancelOpen, setIsCancelOpen] = useState(false);
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false);
 
   return (
     <div className="bg-surface min-h-screen pb-12">
@@ -57,18 +61,19 @@ export default function OrderDetailPage() {
             </span>
           </div>
 
-          <Link
-            href="#"
-            className="border-surface-container group flex items-center justify-between border-t py-4">
+          <button
+            type="button"
+            onClick={() => setIsPaymentOpen(true)}
+            className="border-surface-container group flex w-full items-center justify-between border-t py-4 text-left">
             <span className="text-accent font-bold">
               Xem chi tiết thông tin thanh toán
             </span>
             <ChevronRight className="text-accent h-5 w-5 transition-transform group-hover:translate-x-1" />
-          </Link>
+          </button>
         </div>
 
         {/* Customer Info */}
-        <div className="border-surface-container-highest space-y-6 overflow-hidden rounded-3xl border bg-white p-6 shadow-sm">
+        <div className="border-surface-container-highest bg-surface-container-lowest space-y-6 overflow-hidden rounded-2xl border p-6 shadow-sm">
           <h2 className="text-xl font-bold">Thông tin Người Đặt hàng</h2>
           <div className="space-y-4">
             <div className="flex justify-between text-sm">
@@ -99,7 +104,7 @@ export default function OrderDetailPage() {
         </div>
 
         {/* Shipping Info */}
-        <div className="border-surface-container-highest space-y-6 overflow-hidden rounded-3xl border bg-white p-6 shadow-sm">
+        <div className="border-surface-container-highest bg-surface-container-lowest space-y-6 overflow-hidden rounded-2xl border p-6 shadow-sm">
           <h2 className="text-xl font-bold">Thông tin Địa chỉ Lắp đặt</h2>
           <div className="space-y-4">
             <div className="flex justify-between text-sm">
@@ -137,9 +142,9 @@ export default function OrderDetailPage() {
               key={idx}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="border-surface-container-highest rounded-3xl border bg-white p-6 shadow-sm">
+              className="border-surface-container-highest bg-surface-container-lowest rounded-2xl border p-6 shadow-sm">
               <div className="flex gap-4">
-                <div className="bg-surface-container flex h-24 w-24 shrink-0 items-center justify-center rounded-xl p-2">
+                <div className="bg-surface-container-low flex h-24 w-24 shrink-0 items-center justify-center rounded-xl p-2">
                   <Image
                     src={product.image}
                     alt={product.name}
@@ -160,7 +165,7 @@ export default function OrderDetailPage() {
                       <p className="text-secondary text-xs line-through opacity-40">
                         {product.originalPrice.toLocaleString()} đ
                       </p>
-                      <p className="text-accent text-lg font-extrabold">
+                      <p className="text-primary text-lg font-extrabold">
                         {product.price.toLocaleString()} đ
                       </p>
                     </div>
@@ -173,11 +178,56 @@ export default function OrderDetailPage() {
 
         {/* Action Buttons */}
         <div className="pt-8">
-          <button className="w-full rounded-2xl border border-red-100 bg-white py-4 font-bold text-red-500 shadow-sm transition-colors hover:bg-red-50">
+          <button
+            onClick={() => setIsCancelOpen(true)}
+            className="border-surface-container-highest bg-surface-container-lowest w-full rounded-2xl border py-4 font-bold text-red-500 shadow-sm transition-colors hover:bg-red-50">
             Hủy đơn
           </button>
         </div>
       </div>
+
+      <Modal
+        isOpen={isCancelOpen}
+        onClose={() => setIsCancelOpen(false)}
+        contentClassName="px-8 pb-10 pt-2 text-center md:px-12">
+        <p className="text-primary text-base leading-relaxed">
+          Để bảo vệ quyền lợi tài chính của quý khách, chúng tôi xin thông báo
+          như sau: Khi hủy đơn hàng, có thể phát sinh lãi hoặc chi phí liên quan
+          đến khoản vay hoặc khoản trả góp. Quý khách vui lòng gọi hotline
+          18001503 để được hỗ trợ và xác nhận hủy đơn.
+        </p>
+        <div className="mt-6">
+          <button
+            onClick={() => setIsCancelOpen(false)}
+            className="bg-accent w-full rounded-full py-3 text-sm font-bold text-white">
+            Đóng
+          </button>
+        </div>
+      </Modal>
+
+      <BottomSheet
+        isOpen={isPaymentOpen}
+        onClose={() => setIsPaymentOpen(false)}
+        title="Lịch sử thanh toán hàng tháng">
+        <div className="rounded-2xl bg-red-50 p-5">
+          <p className="text-secondary text-sm">
+            Tổng tiền cần trả kỳ tiếp theo:
+          </p>
+          <p className="mt-2 text-3xl font-extrabold text-red-600">0 đ/tháng</p>
+        </div>
+
+        <div className="mt-5 flex items-center gap-3">
+          <span className="text-primary text-sm font-semibold">Năm:</span>
+          <div className="border-surface-container-highest bg-surface-container-low flex items-center gap-2 rounded-full border px-4 py-2">
+            <span className="text-secondary text-sm font-semibold">2026</span>
+            <ChevronRight className="text-secondary h-4 w-4 rotate-90" />
+          </div>
+        </div>
+
+        <p className="text-secondary mt-8 text-center text-sm">
+          Không có lịch thanh toán
+        </p>
+      </BottomSheet>
     </div>
   );
 }

@@ -25,8 +25,8 @@ export default function ProfilePage() {
     <div className="bg-surface min-h-screen pb-12">
       <div className="mx-auto max-w-2xl space-y-6 px-5 pt-8">
         {/* Profile Card */}
-        <div className="border-surface-container-highest flex flex-col items-center rounded-3xl border bg-white p-8 shadow-sm">
-          <div className="bg-surface-container border-surface-container-highest mb-6 flex h-24 w-24 items-center justify-center rounded-full border">
+        <div className="border-surface-container-highest bg-surface-container-lowest flex flex-col items-center rounded-2xl border p-8 shadow-sm">
+          <div className="bg-surface-container-low border-surface-container-highest mb-6 flex h-24 w-24 items-center justify-center rounded-full border">
             <User className="text-secondary h-10 w-10 opacity-40" />
           </div>
           <h2 className="text-primary mb-1 text-2xl font-extrabold tracking-tight">
@@ -41,10 +41,10 @@ export default function ProfilePage() {
         </div>
 
         {/* Personal Information Section */}
-        <div className="border-surface-container-highest overflow-hidden rounded-3xl border bg-white shadow-sm">
+        <div className="border-surface-container-highest bg-surface-container-lowest overflow-hidden rounded-2xl border shadow-sm">
           <div className="border-surface-container flex items-center justify-between border-b p-6">
             <h3 className="text-xl font-bold">Thông tin cá nhân</h3>
-            <button className="hover:bg-surface-container rounded-full p-2 transition-colors">
+            <button className="hover:bg-surface-container-low rounded-full p-2 transition-colors">
               <Edit3 className="text-secondary h-5 w-5" />
             </button>
           </div>
@@ -85,9 +85,9 @@ export default function ProfilePage() {
         <div className="space-y-3">
           <Link
             href="/history"
-            className="border-surface-container-highest group flex w-full items-center justify-between rounded-2xl border bg-white p-6 shadow-sm transition-all active:scale-[0.98]">
+            className="border-surface-container-highest bg-surface-container-lowest group hover:bg-surface-container-low flex w-full items-center justify-between rounded-2xl border p-6 shadow-sm transition-all active:scale-[0.98]">
             <div className="flex items-center gap-4">
-              <div className="bg-surface-container flex h-12 w-12 items-center justify-center rounded-xl">
+              <div className="bg-surface-container-low flex h-12 w-12 items-center justify-center rounded-xl">
                 <Clock className="text-primary h-5 w-5" />
               </div>
               <div className="text-left">
@@ -100,9 +100,9 @@ export default function ProfilePage() {
             <ChevronRight className="text-secondary h-5 w-5 opacity-40 transition-transform group-hover:translate-x-1" />
           </Link>
 
-          <button className="border-surface-container-highest group flex w-full items-center justify-between rounded-2xl border bg-white p-6 shadow-sm transition-all active:scale-[0.98]">
+          <button className="border-surface-container-highest bg-surface-container-lowest group hover:bg-surface-container-low flex w-full items-center justify-between rounded-2xl border p-6 shadow-sm transition-all active:scale-[0.98]">
             <div className="flex items-center gap-4">
-              <div className="bg-surface-container flex h-12 w-12 items-center justify-center rounded-xl">
+              <div className="bg-surface-container-low flex h-12 w-12 items-center justify-center rounded-xl">
                 <MapPin className="text-primary h-5 w-5" />
               </div>
               <div className="text-left">

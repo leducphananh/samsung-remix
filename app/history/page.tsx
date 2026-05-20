@@ -1,8 +1,10 @@
 'use client';
+import FormInput from '@/components/common/form-input';
 import { Calendar, ChevronDown, Search } from 'lucide-react';
 import { motion } from 'motion/react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 
 const orders = [
   {
@@ -47,6 +49,10 @@ const orders = [
 ];
 
 export default function HistoryPage() {
+  const [isDateFilterOpen, setIsDateFilterOpen] = useState(false);
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
+
   return (
     <div className="bg-surface min-h-screen pb-12">
       <div className="mx-auto max-w-2xl space-y-6 px-5 pt-8">
@@ -55,7 +61,7 @@ export default function HistoryPage() {
           <input
             type="text"
             placeholder="Tìm theo mã đơn hàng, mã hợp đồng..."
-            className="border-surface-container-highest focus:border-primary w-full rounded-2xl border bg-white py-4 pr-4 pl-12 text-sm font-medium shadow-sm outline-none focus:ring-0"
+            className="border-surface-container-highest bg-surface-container-lowest focus:border-primary w-full rounded-2xl border py-4 pr-4 pl-12 text-sm font-medium shadow-sm outline-none focus:ring-0"
           />
           <Search className="text-secondary absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 opacity-40" />
         </div>
@@ -74,43 +80,50 @@ export default function HistoryPage() {
         </div>
 
         {/* Date Filter Accordion */}
-        <div className="border-surface-container-highest text-primary overflow-hidden rounded-2xl border bg-white shadow-sm">
-          <div className="flex cursor-pointer items-center justify-between p-4">
+        <div className="border-surface-container-highest bg-surface-container-lowest text-primary overflow-hidden rounded-2xl border shadow-sm">
+          <button
+            type="button"
+            onClick={() => setIsDateFilterOpen(prev => !prev)}
+            className="hover:bg-surface-container-low flex w-full items-center justify-between p-4 text-left transition-colors">
             <div className="flex items-center gap-2">
               <Calendar className="text-secondary h-5 w-5 opacity-60" />
               <span className="text-sm font-bold">Lọc theo ngày</span>
             </div>
-            <ChevronDown className="text-secondary h-4 w-4 opacity-60" />
-          </div>
+            <ChevronDown
+              className={`text-secondary h-4 w-4 opacity-60 transition-transform ${isDateFilterOpen ? 'rotate-180' : ''}`}
+            />
+          </button>
 
-          <div className="space-y-6 px-5 pt-2 pb-6">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <p className="text-secondary text-xs font-bold tracking-widest uppercase opacity-60">
-                  Từ ngày
-                </p>
-                <div className="bg-surface-container border-surface-container-highest h-14 rounded-xl border p-4"></div>
+          {isDateFilterOpen && (
+            <div className="space-y-6 px-5 pt-2 pb-6">
+              <div className="grid grid-cols-2 gap-4">
+                <FormInput
+                  type="date"
+                  label="Từ ngày"
+                  value={fromDate}
+                  onChange={event => setFromDate(event.target.value)}
+                />
+                <FormInput
+                  type="date"
+                  label="Đến ngày"
+                  value={toDate}
+                  onChange={event => setToDate(event.target.value)}
+                />
               </div>
-              <div className="space-y-2">
-                <p className="text-secondary text-xs font-bold tracking-widest uppercase opacity-60">
-                  Đến ngày
-                </p>
-                <div className="bg-surface-container border-surface-container-highest h-14 rounded-xl border p-4"></div>
+
+              <div className="flex flex-wrap gap-2">
+                {['Hôm nay', '7 ngày qua', '30 ngày qua', '3 tháng qua'].map(
+                  label => (
+                    <button
+                      key={label}
+                      className="border-surface-container-highest text-secondary hover:bg-surface-container-low rounded-full border px-4 py-2 text-xs font-bold transition-colors">
+                      {label}
+                    </button>
+                  ),
+                )}
               </div>
             </div>
-
-            <div className="flex flex-wrap gap-2">
-              {['Hôm nay', '7 ngày qua', '30 ngày qua', '3 tháng qua'].map(
-                label => (
-                  <button
-                    key={label}
-                    className="border-surface-container-highest text-secondary hover:bg-surface-container rounded-full border px-4 py-2 text-xs font-bold transition-colors">
-                    {label}
-                  </button>
-                ),
-              )}
-            </div>
-          </div>
+          )}
         </div>
 
         {/* Order List */}
@@ -122,7 +135,7 @@ export default function HistoryPage() {
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="border-surface-container-highest mb-4 overflow-hidden rounded-3xl border bg-white p-6 shadow-sm transition-transform active:scale-[0.98]">
+                className="border-surface-container-highest bg-surface-container-lowest mb-4 overflow-hidden rounded-2xl border p-6 shadow-sm transition-transform active:scale-[0.98]">
                 <div className="mb-6 flex items-start justify-between">
                   <div>
                     <h3 className="text-primary text-lg font-extrabold tracking-tight">
@@ -132,13 +145,13 @@ export default function HistoryPage() {
                       {order.date}
                     </p>
                   </div>
-                  <span className="bg-surface-container-highest text-secondary rounded-full px-4 py-2 text-xs font-bold">
+                  <span className="bg-surface-container-high text-secondary rounded-full px-4 py-2 text-xs font-bold">
                     {order.status}
                   </span>
                 </div>
 
                 <div className="mb-6 flex gap-4">
-                  <div className="bg-surface-container flex h-20 w-20 items-center justify-center rounded-xl p-2">
+                  <div className="bg-surface-container-low flex h-20 w-20 items-center justify-center rounded-xl p-2">
                     <Image
                       src={order.product.image}
                       alt={order.product.name}

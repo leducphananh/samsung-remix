@@ -71,13 +71,15 @@ const Modal = ({
               {title}
             </h2>
           )}
-          <button
-            type="button"
-            aria-label="Đóng"
-            className="ml-auto flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-full hover:bg-[#f4f4f4]"
-            onClick={onClose}>
-            <X size={28} strokeWidth={1.5} />
-          </button>
+          {title && (
+            <button
+              type="button"
+              aria-label="Đóng"
+              className="ml-auto flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-full hover:bg-[#f4f4f4]"
+              onClick={onClose}>
+              <X size={28} strokeWidth={1.5} />
+            </button>
+          )}
         </div>
 
         <div
