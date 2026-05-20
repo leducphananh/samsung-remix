@@ -1,5 +1,4 @@
 'use client';
-
 import { products as homeProducts } from '@/app/page';
 import ProductItem from '@/components/home/product-item';
 import { useCart } from '@/providers/cart.provider';
@@ -28,7 +27,7 @@ const products: ProductListItem[] = homeProducts.map(product => ({
   category: getCategory(product.name),
 }));
 
-export default function ProductListPage() {
+export default function ProductListContent() {
   const { addToCart: onAddToCart } = useCart();
   const searchParams = useSearchParams();
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -122,16 +121,28 @@ export default function ProductListPage() {
       </div>
 
       <section className="px-5 pt-6">
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {sortedProducts.map(product => (
-            <ProductItem
-              key={product.id}
-              product={product}
-              onAddToCart={onAddToCart}
-              compact
-            />
-          ))}
-        </div>
+        {sortedProducts.length > 0 ? (
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {sortedProducts.map(product => (
+              <ProductItem
+                key={product.id}
+                product={product}
+                onAddToCart={onAddToCart}
+                compact
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="py-16 text-center">
+            <Search className="text-surface-container-highest mx-auto mb-4 h-12 w-12" />
+            <p className="text-secondary text-sm">
+              Không tìm thấy sản phẩm phù hợp với &quot;{searchTerm}&quot;
+            </p>
+            <p className="text-secondary mt-2 text-xs">
+              Hãy thử từ khóa khác hoặc bỏ bộ lọc hiện tại.
+            </p>
+          </div>
+        )}
       </section>
     </div>
   );
