@@ -1,6 +1,5 @@
 'use client';
 import { useCart } from '@/providers/cart.provider';
-import { useSearchQuery } from '@/providers/search-query.provider';
 import {
   Facebook,
   Headphones,
@@ -16,85 +15,47 @@ import {
 import { AnimatePresence, motion } from 'motion/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { PropsWithChildren, useState } from 'react';
 import FloatingHotlineButton from './floating-hotline-button';
 import MobileDrawer from './mobile-drawer';
 
 const Layout = ({ children }: PropsWithChildren) => {
-  const { searchQuery, setSearchQuery } = useSearchQuery();
   const { totalQty: cartCount } = useCart();
-  const [showSearch, setShowSearch] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   return (
     <div className="flex min-h-screen flex-col">
       {/* Top Header */}
       <header className="bg-surface/80 border-surface-container-highest fixed top-0 z-50 flex h-14 w-full items-center justify-between border-b px-4 backdrop-blur-md">
-        <AnimatePresence mode="wait">
-          {!showSearch ? (
-            <motion.div
-              key="nav-left"
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -10 }}
-              className="flex items-center gap-4">
-              <button
-                onClick={() => setIsDrawerOpen(true)}
-                aria-label="Mở danh mục"
-                className="flex items-center">
-                <Menu className="h-6 w-6" />
-              </button>
-              <Link
-                href="/"
-                className="text-xl font-extrabold tracking-tighter">
-                <Image
-                  src="/logo.svg"
-                  alt="Samsung Logo"
-                  width={100}
-                  height={27}
-                  className="lg:w-32.5"
-                />
-              </Link>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="search-bar"
-              initial={{ opacity: 0, width: 0 }}
-              animate={{ opacity: 1, width: '100%' }}
-              exit={{ opacity: 0, width: 0 }}
-              className="flex flex-1 items-center gap-2 pr-4">
-              <div className="relative flex-1">
-                <Search className="text-secondary absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
-                <input
-                  type="text"
-                  placeholder="Tìm kiếm sản phẩm..."
-                  autoFocus
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  className="bg-surface-container focus:ring-primary w-full rounded-full py-1.5 pr-4 pl-10 text-sm focus:ring-1 focus:outline-none"
-                />
-              </div>
-              <button
-                onClick={() => {
-                  setShowSearch(false);
-                  setSearchQuery('');
-                }}
-                className="text-secondary text-xs font-bold">
-                Hủy
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="flex items-center gap-4">
+          <button
+            onClick={() => setIsDrawerOpen(true)}
+            aria-label="Mở danh mục"
+            className="flex items-center">
+            <Menu className="h-6 w-6" />
+          </button>
+          <Link href="/" className="text-xl font-extrabold tracking-tighter">
+            <Image
+              src="/logo.svg"
+              alt="Samsung Logo"
+              width={100}
+              height={27}
+              className="lg:w-32.5"
+            />
+          </Link>
+        </motion.div>
 
         <div className="flex items-center gap-4">
-          {!showSearch && (
-            <Search
-              onClick={() => setShowSearch(true)}
-              className="h-5 w-5 cursor-pointer"
-            />
-          )}
+          <Search
+            onClick={() => router.push('/product-list?focusSearch=1')}
+            className="h-5 w-5 cursor-pointer"
+          />
           <Link href="/cart" className="relative">
             <ShoppingCart className="h-5 w-5 cursor-pointer" />
             {cartCount > 0 && (

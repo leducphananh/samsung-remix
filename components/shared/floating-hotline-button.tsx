@@ -9,9 +9,7 @@ const FloatingHotlineButton = () => {
   const pathname = usePathname();
   const [isHotlineOpen, setIsHotlineOpen] = useState(false);
 
-  const shouldOffset = ['/product', '/cart', '/checkout'].some(segment =>
-    pathname.includes(segment),
-  );
+  const shouldOffset = ['/product', '/cart', '/checkout'].includes(pathname);
 
   return (
     <div

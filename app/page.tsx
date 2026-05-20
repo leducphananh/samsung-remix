@@ -7,6 +7,7 @@ import { parsePrice } from '@/utils/price.util';
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { motion } from 'motion/react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
@@ -56,7 +57,7 @@ const adBanners = [
   },
 ];
 
-const products: Product[] = [
+export const products: Product[] = [
   {
     id: 's26-ultra',
     name: 'Galaxy S26 Ultra',
@@ -170,10 +171,19 @@ const products: Product[] = [
 export default function DiscoveryPage() {
   const { searchQuery } = useSearchQuery();
   const { addToCart: onAddToCart } = useCart();
+  const router = useRouter();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState('Tất cả');
   const [priceRange, setPriceRange] = useState('Tất cả');
   const swiperRef = useRef<SwiperType | null>(null);
+
+  const handleCategoryClick = (category: string) => {
+    if (['Galaxy S', 'Galaxy Z', 'Galaxy A', 'Phụ kiện'].includes(category)) {
+      router.push(`/product-list?category=${encodeURIComponent(category)}`);
+      return;
+    }
+    setSelectedCategory(category);
+  };
 
   const priceRanges = [
     { label: 'Tất cả', min: 0, max: Infinity },
@@ -300,7 +310,7 @@ export default function DiscoveryPage() {
               cat => (
                 <button
                   key={cat}
-                  onClick={() => setSelectedCategory(cat)}
+                  onClick={() => handleCategoryClick(cat)}
                   className={`pb-1 text-sm font-medium whitespace-nowrap transition-all ${selectedCategory === cat ? 'text-primary border-primary border-b-2' : 'text-secondary hover:text-primary'}`}>
                   {cat}
                 </button>
@@ -346,31 +356,6 @@ export default function DiscoveryPage() {
           </div>
         )}
       </section>
-
-      {/* Promo */}
-      {/* <section className="px-5 py-12">
-        <div className="relative flex flex-col items-center overflow-hidden rounded-2xl bg-black p-8 text-center text-white">
-          <div className="z-10">
-            <h2 className="mb-4 text-2xl font-bold">
-              Lên đời Galaxy - Nhận ngay ưu đãi
-            </h2>
-            <p className="mb-6 text-sm opacity-80">
-              Thu cũ đổi mới hỗ trợ lên đến 5.000.000 VNĐ.
-            </p>
-            <button className="rounded-full bg-white px-8 py-3 text-sm font-bold text-black">
-              Khám phá ngay
-            </button>
-          </div>
-          <div className="absolute inset-0 opacity-30">
-            <Image
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5qv2K0qxyYI37o2_7aJ32Wu__U_L-HwtnEPWa9Srf2uKXu2RJAvLZ26mjrkXQaRa3oA7_bygtclevpRrRhnAkXqbbaIT4JNKn80xW1dZR2VvDDgdH4lgRS3c28Q0cx3q189lHCazthkJcIOK4SuTejfrwKiHtNJ04GgEl3hGWkVRJ5_Y8JFmOX2c_FvM4V3DGAu6YtyW7i0fHW25EQzz_Zqu5WCr7cIGuvLWZyh7KLUoq6LgGm0Ezk8n7N1rl81GcOgHSALnK024"
-              alt="Promo background"
-              layout="fill"
-              objectFit="cover"
-            />
-          </div>
-        </div>
-      </section> */}
     </div>
   );
 }

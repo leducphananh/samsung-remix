@@ -28,7 +28,7 @@ export function StickyAddToCart({
         </div>
         <button
           onClick={onAddToCart}
-          className="bg-accent block w-full rounded-full py-4 text-center text-base font-bold text-white">
+          className="bg-accent block w-full rounded-full py-3.5 text-center text-base font-bold text-white">
           Thêm vào giỏ hàng
         </button>
       </div>
