@@ -1,12 +1,17 @@
+'use client';
+
 import { PropsWithChildren } from 'react';
 import { CartProvider } from './cart.provider';
+import { ReactQueryProvider } from './query.provider';
 import { SearchQueryProvider } from './search-query.provider';
 
 const AppProvider = ({ children }: PropsWithChildren) => {
   return (
-    <SearchQueryProvider>
-      <CartProvider>{children}</CartProvider>
-    </SearchQueryProvider>
+    <ReactQueryProvider>
+      <SearchQueryProvider>
+        <CartProvider>{children}</CartProvider>
+      </SearchQueryProvider>
+    </ReactQueryProvider>
   );
 };
 

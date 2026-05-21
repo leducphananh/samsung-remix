@@ -1,9 +1,10 @@
 'use client';
-import { products as homeProducts } from '@/app/page';
+import { getProducts } from '@/api/products.api';
 import ProductItem from '@/components/home/product-item';
 import { useCart } from '@/providers/cart.provider';
 import { Product } from '@/types/product.type';
 import { parsePrice } from '@/utils/price.util';
+import { useQuery } from '@tanstack/react-query';
 import { ArrowUpDown, Search } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -22,11 +23,6 @@ const getCategory = (name: string) => {
   return 'Phụ kiện';
 };
 
-const products: ProductListItem[] = homeProducts.map(product => ({
-  ...product,
-  category: getCategory(product.name),
-}));
-
 export default function ProductListContent() {
   const { addToCart: onAddToCart } = useCart();
   const searchParams = useSearchParams();
@@ -34,6 +30,16 @@ export default function ProductListContent() {
   const [selectedCategory, setSelectedCategory] = useState('Tất cả');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOption, setSortOption] = useState('Mới nhất');
+  const { data: products = [] } = useQuery<ProductListItem[]>({
+    queryKey: ['products', 'product-list'],
+    queryFn: async () => {
+      const data = await getProducts();
+      return data.map(product => ({
+        ...product,
+        category: getCategory(product.name),
+      }));
+    },
+  });
 
   useEffect(() => {
     const category = searchParams.get('category');
@@ -58,7 +64,7 @@ export default function ProductListContent() {
         selectedCategory === 'Tất cả' || product.category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
-  }, [searchTerm, selectedCategory]);
+  }, [products, searchTerm, selectedCategory]);
 
   const sortedProducts = useMemo(() => {
     const items = [...filteredProducts];
