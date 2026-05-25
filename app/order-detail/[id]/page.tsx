@@ -1,46 +1,24 @@
 'use client';
+import { getOrder } from '@/api/order.api';
 import BottomSheet from '@/components/common/bottom-sheet';
 import Modal from '@/components/common/modal';
+import { OrderDetail } from '@/types/order.type';
+import { useQuery } from '@tanstack/react-query';
 import { ChevronRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 
-const ordersData = {
-  '#ORD-2026-00724': {
-    id: '#ORD-2026-00724',
-    date: '13/05/2026',
-    status: 'Dự thảo',
-    customer: {
-      name: 'LY DIEU BINH',
-      phone: '0988456679',
-      email: 'binhld@gmail.com',
-    },
-    shipping: {
-      recipient: 'LY DIEU BINH',
-      phone: '0988456679',
-      address: '12 pho , P. Nhà Mát, Tỉnh Bạc Liêu',
-    },
-    products: [
-      {
-        name: 'Tủ chăm sóc quần áo thông minh LG Styler 5 móc Màu be | SC5MBR80H',
-        quantity: 1,
-        price: 49179100,
-        originalPrice: 49179100,
-        image:
-          'https://lh3.googleusercontent.com/aida-public/AB6AXuD3ZmsC7FZ1WjuQZ3PGqK9oGfL69ON2VCWtx6g_vyE4Sw4eZSWmmnvQP4pK6EmiEiTNrckqgZI3T2XfXf-N8PA0hGHRbsDHsREe0hM0gEZOEIMGkIsgDqRWXozzwACZsnLFg5s0Bwf0iknHccaTOmgYNttoz99qN5qSbMHdWeNFMCExfGOJMo0QypWJI9jbDuMa60tRDQ-ttfT4J-ybTzokSNbaa2Mdxa0a12gLycLDO4d3s-Yg1eEP2HMmh-L0j0DSZGLTZTTvsvo',
-      },
-    ],
-  },
-};
-
 export default function OrderDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const order =
-    ordersData[id as keyof typeof ordersData] || ordersData['#ORD-2026-00724'];
   const [isCancelOpen, setIsCancelOpen] = useState(false);
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
+
+  const { data: order = {} as OrderDetail } = useQuery<OrderDetail>({
+    queryKey: ['order-detail', id],
+    queryFn: () => getOrder(id),
+  });
 
   return (
     <div className="bg-surface min-h-screen pb-12">
@@ -81,7 +59,7 @@ export default function OrderDetailPage() {
                 Họ và tên
               </span>
               <span className="text-primary font-bold">
-                {order.customer.name}
+                {order.customer?.name}
               </span>
             </div>
             <div className="flex justify-between text-sm">
@@ -89,7 +67,7 @@ export default function OrderDetailPage() {
                 Số điện thoại
               </span>
               <span className="text-primary font-bold">
-                {order.customer.phone}
+                {order.customer?.phone}
               </span>
             </div>
             <div className="flex justify-between text-sm">
@@ -97,7 +75,7 @@ export default function OrderDetailPage() {
                 Email
               </span>
               <span className="text-primary font-bold">
-                {order.customer.email}
+                {order.customer?.email}
               </span>
             </div>
           </div>
@@ -112,7 +90,7 @@ export default function OrderDetailPage() {
                 Người nhận
               </span>
               <span className="text-primary font-bold">
-                {order.shipping.recipient}
+                {order.shipping?.recipient}
               </span>
             </div>
             <div className="flex justify-between text-sm">
@@ -120,7 +98,7 @@ export default function OrderDetailPage() {
                 Số điện thoại
               </span>
               <span className="text-primary font-bold">
-                {order.shipping.phone}
+                {order.shipping?.phone}
               </span>
             </div>
             <div className="flex items-start justify-between text-sm">
@@ -128,7 +106,7 @@ export default function OrderDetailPage() {
                 Địa chỉ
               </span>
               <span className="text-primary max-w-50 text-right font-bold">
-                {order.shipping.address}
+                {order.shipping?.address}
               </span>
             </div>
           </div>
@@ -137,7 +115,7 @@ export default function OrderDetailPage() {
         {/* Product List */}
         <div className="space-y-4">
           <h2 className="px-2 text-xl font-bold">Danh sách Sản phẩm Đã Đặt</h2>
-          {order.products.map((product, idx) => (
+          {order.products?.map((product, idx) => (
             <motion.div
               key={idx}
               initial={{ opacity: 0, y: 10 }}

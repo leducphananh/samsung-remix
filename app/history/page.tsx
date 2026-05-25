@@ -1,57 +1,24 @@
 'use client';
+import { getOrders } from '@/api/order.api';
 import FormInput from '@/components/common/form-input';
+import { Order } from '@/types/order.type';
+import { useQuery } from '@tanstack/react-query';
+import clsx from 'clsx';
 import { Calendar, ChevronDown, Search } from 'lucide-react';
 import { motion } from 'motion/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
-const orders = [
-  {
-    id: '#ORD-2026-00724',
-    date: '13/05/2026',
-    status: 'Dự thảo',
-    product: {
-      name: 'Tủ chăm sóc quần áo thông minh LG Styler 5 móc Màu be | SC5MBR80H',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuD3ZmsC7FZ1WjuQZ3PGqK9oGfL69ON2VCWtx6g_vyE4Sw4eZSWmmnvQP4pK6EmiEiTNrckqgZI3T2XfXf-N8PA0hGHRbsDHsREe0hM0gEZOEIMGkIsgDqRWXozzwACZsnLFg5s0Bwf0iknHccaTOmgYNttoz99qN5qSbMHdWeNFMCExfGOJMo0QypWJI9jbDuMa60tRDQ-ttfT4J-ybTzokSNbaa2Mdxa0a12gLycLDO4d3s-Yg1eEP2HMmh-L0j0DSZGLTZTTvsvo',
-      quantity: 1,
-      duration: '12 tháng',
-    },
-    total: 49179100,
-  },
-  {
-    id: '#ORD-2026-00718',
-    date: '13/05/2026',
-    status: 'Dự thảo',
-    product: {
-      name: 'Điều hòa LG DUALCOOL™ Inverter AI Air 1 chiều 1.5HP IDC12M2',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuBP6nzocz3mI5LkYvnfX3rKr7jBcc9WSEeSBZ26iLFz_yTz_Q14hOYajbYQkoEhVbOSxWwhO5qLq55dl-mqB_jfrLu-82zVW3xQM4NyBUlM_cx30RGdt4-WQHAENSBl0Csa9SXXcr3KnmY_mfrH4P2-JrQ6HEmqm7I6ZDGtkHXKXSF2LKBQtnr_KAC-NLuVHcYVMskiyUuNvKYz3QDAzU_D-iEUlKF_Tn36A64QhaGk0r2W7vyXqmDFMq9ZwZjSt9HMqXNFsTIKv3Q',
-      quantity: 1,
-      duration: '12 tháng',
-    },
-    total: 13408100,
-  },
-  {
-    id: '#ORD-2026-00717',
-    date: '13/05/2026',
-    status: 'Dự thảo',
-    product: {
-      name: 'Điều hòa LG DUALCOOL™ Inverter AI Air 1 chiều 1.5HP IDC12M2',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuBP6nzocz3mI5LkYvnfX3rKr7jBcc9WSEeSBZ26iLFz_yTz_Q14hOYajbYQkoEhVbOSxWwhO5qLq55dl-mqB_jfrLu-82zVW3xQM4NyBUlM_cx30RGdt4-WQHAENSBl0Csa9SXXcr3KnmY_mfrH4P2-JrQ6HEmqm7I6ZDGtkHXKXSF2LKBQtnr_KAC-NLuVHcYVMskiyUuNvKYz3QDAzU_D-iEUlKF_Tn36A64QhaGk0r2W7vyXqmDFMq9ZwZjSt9HMqXNFsTIKv3Q',
-      quantity: 1,
-      duration: '12 tháng',
-    },
-    total: 13408100,
-  },
-];
-
 export default function HistoryPage() {
   const [isDateFilterOpen, setIsDateFilterOpen] = useState(false);
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
+
+  const { data: orders = [] } = useQuery<Order[]>({
+    queryKey: ['orders'],
+    queryFn: getOrders,
+  });
 
   return (
     <div className="bg-surface min-h-screen pb-12">
@@ -72,7 +39,12 @@ export default function HistoryPage() {
             (label, idx) => (
               <button
                 key={label}
-                className={`rounded-full px-6 py-3 text-sm font-bold whitespace-nowrap transition-all ${idx === 0 ? 'bg-accent shadow-accent/20 text-white shadow-lg' : 'bg-surface-container-low text-secondary hover:bg-surface-container'}`}>
+                className={clsx(
+                  'rounded-full px-6 py-3 text-sm font-bold whitespace-nowrap transition-all',
+                  idx === 0
+                    ? 'bg-accent shadow-accent/20 text-white shadow-lg'
+                    : 'bg-surface-container-low text-secondary hover:bg-surface-container',
+                )}>
                 {label}
               </button>
             ),
@@ -90,7 +62,10 @@ export default function HistoryPage() {
               <span className="text-sm font-bold">Lọc theo ngày</span>
             </div>
             <ChevronDown
-              className={`text-secondary h-4 w-4 opacity-60 transition-transform ${isDateFilterOpen ? 'rotate-180' : ''}`}
+              className={clsx(
+                'text-secondary h-4 w-4 opacity-60 transition-transform',
+                isDateFilterOpen && 'rotate-180',
+              )}
             />
           </button>
 
