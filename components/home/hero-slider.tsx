@@ -1,4 +1,5 @@
 import { Banner } from '@/types/banner.type';
+import clsx from 'clsx';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import Image from 'next/image';
@@ -85,7 +86,10 @@ const HeroSlider = ({ adBanners }: Props) => {
           <button
             key={idx}
             onClick={() => swiperRef.current?.slideToLoop(idx)}
-            className={`h-1.5 rounded-full transition-all duration-300 ${idx === currentSlide ? 'w-8 bg-white' : 'w-2 bg-white/40'}`}
+            className={clsx(
+              'h-1.5 rounded-full transition-all duration-300',
+              idx === currentSlide ? 'w-8 bg-white' : 'w-2 bg-white/40',
+            )}
           />
         ))}
       </div>

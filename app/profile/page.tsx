@@ -1,3 +1,7 @@
+'use client';
+import { getProfile } from '@/api/profile.api';
+import { Profile } from '@/types/profile.type';
+import { useQuery } from '@tanstack/react-query';
 import {
   Calendar,
   ChevronRight,
@@ -12,14 +16,10 @@ import {
 import Link from 'next/link';
 
 export default function ProfilePage() {
-  const profileData = {
-    name: 'LY DIEU BINH',
-    email: 'binhld@gmail.com',
-    phone: '0988456679',
-    gender: 'Nam',
-    birthDate: '16/9/1980',
-    idNumber: '001080040688',
-  };
+  const { data: profileData = {} as Profile } = useQuery<Profile>({
+    queryKey: ['profile'],
+    queryFn: getProfile,
+  });
 
   return (
     <div className="bg-surface min-h-screen pb-12">
