@@ -1,4 +1,5 @@
 import { ProductDetailVariant } from '@/types/product.type';
+import clsx from 'clsx';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
@@ -23,14 +24,14 @@ export function ProductHero({
         }}
         onSlideChange={swiper => setActiveIndex(swiper.realIndex)}>
         {selectedVariant.slides.map(slide => (
-          <SwiperSlide key={slide.src}>
+          <SwiperSlide key={slide.alt}>
             <div className="flex items-center justify-center">
               <Image
                 src={slide.src}
                 alt={slide.alt}
                 width={600}
                 height={400}
-                className="h-auto w-4/5 object-contain"
+                className="h-auto min-h-86 w-4/5 object-contain"
               />
             </div>
           </SwiperSlide>
@@ -42,7 +43,12 @@ export function ProductHero({
             key={idx}
             onClick={() => swiperRef.current?.slideToLoop(idx)}
             aria-label={`Chuyển tới ảnh ${idx + 1}`}
-            className={`${idx === activeIndex ? 'bg-primary' : 'bg-surface-container-highest'} h-2 w-2 rounded-full`}
+            className={clsx(
+              'h-2 w-2 rounded-full',
+              idx === activeIndex
+                ? 'bg-primary'
+                : 'bg-surface-container-highest',
+            )}
           />
         ))}
       </div>
