@@ -74,7 +74,7 @@ const BottomSheet = ({
               'relative w-full max-w-230 rounded-t-[24px] bg-white shadow-2xl',
               className,
             )}>
-            <div className="flex flex-col items-center px-5 pt-4">
+            <div className="border-surface-container-highest flex flex-col items-center border-b px-5 pt-4">
               <div className="bg-surface-container-high h-1.5 w-12 rounded-full" />
               <div className="flex w-full items-center justify-between pt-4 pb-3">
                 {title && (
@@ -94,7 +94,7 @@ const BottomSheet = ({
               </div>
             </div>
 
-            <div className={clsx('px-5 pb-6', contentClassName)}>
+            <div className={clsx('px-5 py-6', contentClassName)}>
               {children}
             </div>
 

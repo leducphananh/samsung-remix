@@ -100,7 +100,9 @@ export default function ProfilePage() {
             <ChevronRight className="text-secondary h-5 w-5 opacity-40 transition-transform group-hover:translate-x-1" />
           </Link>
 
-          <button className="border-surface-container-highest bg-surface-container-lowest group hover:bg-surface-container-low flex w-full items-center justify-between rounded-2xl border p-6 shadow-sm transition-all active:scale-[0.98]">
+          <Link
+            href="/addresses"
+            className="border-surface-container-highest bg-surface-container-lowest group hover:bg-surface-container-low flex w-full items-center justify-between rounded-2xl border p-6 shadow-sm transition-all active:scale-[0.98]">
             <div className="flex items-center gap-4">
               <div className="bg-surface-container-low flex h-12 w-12 items-center justify-center rounded-xl">
                 <MapPin className="text-primary h-5 w-5" />
@@ -113,7 +115,7 @@ export default function ProfilePage() {
               </div>
             </div>
             <ChevronRight className="text-secondary h-5 w-5 opacity-40 transition-transform group-hover:translate-x-1" />
-          </button>
+          </Link>
         </div>
 
         {/* Logout */}

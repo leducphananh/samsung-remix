@@ -12,6 +12,8 @@ interface ModalProps {
   footer?: ReactNode;
   className?: string;
   contentClassName?: string;
+  titleClassName?: string;
+  footerClassName?: string;
 }
 
 const Modal = ({
@@ -22,6 +24,8 @@ const Modal = ({
   footer,
   className,
   contentClassName,
+  titleClassName,
+  footerClassName,
 }: ModalProps) => {
   const titleId = useId();
 
@@ -63,11 +67,14 @@ const Modal = ({
           'relative flex max-h-[calc(100dvh-48px)] w-full max-w-230 flex-col overflow-hidden rounded-[20px] bg-white shadow-2xl',
           className,
         )}>
-        <div className="flex items-start justify-between gap-4 px-6 pt-8 pb-4 md:px-15 md:pt-14">
+        <div className="flex items-center justify-between gap-4 px-6 pt-8 pb-4 md:px-15 md:pt-14">
           {title && (
             <h2
               id={titleId}
-              className="font-samsung-sharp text-center text-[18px] leading-tight font-bold md:text-[32px]">
+              className={clsx(
+                'font-samsung-sharp text-center text-[18px] leading-tight font-bold md:text-[32px]',
+                titleClassName,
+              )}>
               {title}
             </h2>
           )}
@@ -91,7 +98,11 @@ const Modal = ({
         </div>
 
         {footer && (
-          <div className="shrink-0 border-t border-[#eee] bg-white px-6 py-5 shadow-[0_-10px_24px_rgba(0,0,0,0.12)] md:px-15 md:py-6">
+          <div
+            className={clsx(
+              'shrink-0 border-t border-[#eee] bg-white px-6 py-5 shadow-[0_-10px_24px_rgba(0,0,0,0.12)] md:px-15 md:py-6',
+              footerClassName,
+            )}>
             {footer}
           </div>
         )}

@@ -1,16 +1,17 @@
-'use client';
+﻿'use client';
 import FormInput from '@/components/common/form-input';
+import Radio from '@/components/common/radio';
 import { useState } from 'react';
 
 const Contract = () => {
   const [nationality, setNationality] = useState<'local' | 'foreign'>('local');
+  const [gender, setGender] = useState<'male' | 'female'>('male');
 
   return (
     <div className="rounded-2xl bg-white p-5 shadow-sm">
       <h3 className="text-lg font-bold">Thông tin hợp đồng</h3>
       <p className="text-secondary mt-2 text-sm">
-        Vui lòng cung cấp thông tin chính xác để hoàn tất thủ tục đăng ký dịch
-        vụ.
+        Vui lòng cung cấp thông tin chính xác để hoàn tất thủ tục đăng ký dịch vụ.
       </p>
 
       <div className="mt-5 space-y-4">
@@ -20,11 +21,19 @@ const Contract = () => {
           </div>
           <div className="mt-3 flex items-center gap-6">
             <label className="flex items-center gap-2 text-sm">
-              <input type="radio" name="gender" defaultChecked />
+              <Radio
+                name="gender"
+                checked={gender === 'male'}
+                onChange={() => setGender('male')}
+              />
               Nam
             </label>
             <label className="flex items-center gap-2 text-sm">
-              <input type="radio" name="gender" />
+              <Radio
+                name="gender"
+                checked={gender === 'female'}
+                onChange={() => setGender('female')}
+              />
               Nữ
             </label>
           </div>
@@ -67,13 +76,9 @@ const Contract = () => {
         </div>
 
         <FormInput
-          label={
-            nationality === 'foreign' ? 'Số Hộ chiếu (passport)' : 'Số CCCD'
-          }
+          label={nationality === 'foreign' ? 'Số Hộ chiếu (passport)' : 'Số CCCD'}
           requiredMark
-          placeholder={
-            nationality === 'foreign' ? 'Nhập số hộ chiếu' : 'Nhập số CCCD'
-          }
+          placeholder={nationality === 'foreign' ? 'Nhập số hộ chiếu' : 'Nhập số CCCD'}
         />
       </div>
     </div>

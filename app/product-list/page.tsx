@@ -5,6 +5,7 @@ import { useCart } from '@/providers/cart.provider';
 import { Product } from '@/types/product.type';
 import { parsePrice } from '@/utils/price.util';
 import { useQuery } from '@tanstack/react-query';
+import clsx from 'clsx';
 import { ArrowUpDown, Search } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -100,11 +101,12 @@ export default function ProductListContent() {
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`rounded-full px-4 py-2 text-sm font-semibold whitespace-nowrap transition-all ${
+              className={clsx(
+                'rounded-full px-4 py-2 text-sm font-semibold whitespace-nowrap transition-all',
                 selectedCategory === category
                   ? 'bg-primary text-white'
-                  : 'bg-surface-container-lowest text-secondary border-surface-container-highest border'
-              }`}>
+                  : 'bg-surface-container-lowest text-secondary border-surface-container-highest border',
+              )}>
               {category}
             </button>
           ))}
